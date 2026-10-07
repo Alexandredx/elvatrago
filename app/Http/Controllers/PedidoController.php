@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class PedidoController extends Controller
 {
     public function index()
     {
         $orders = Order::with('items')->latest()->paginate(15);
-        return view('admin.orders.index', compact('orders'));
+        return view('pedidos.index', compact('orders'));
     }
 
     public function show(Order $order)
     {
         $order->load('items.product');
-        return view('admin.orders.show', compact('order'));
+        return view('pedidos.show', compact('order'));
     }
 
     public function updateStatus(Request $request, Order $order)

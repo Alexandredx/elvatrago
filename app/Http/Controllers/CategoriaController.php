@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class CategoryController extends Controller
+class CategoriaController extends Controller
 {
     public function index()
     {
         $categories = Category::withCount('products')->latest()->get();
-        return view('admin.categories.index', compact('categories'));
+        return view('categorias.index', compact('categories'));
     }
 
     public function store(Request $request)

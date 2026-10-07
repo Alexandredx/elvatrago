@@ -15,7 +15,7 @@ class CartController extends Controller
             $subtotal += $item['price'] * $item['quantity'];
         }
 
-        return view('shop.cart', compact('cart', 'subtotal'));
+        return view('tienda.cart', compact('cart', 'subtotal'));
     }
 
     public function add(Request $request, Product $product)

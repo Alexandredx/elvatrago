@@ -22,7 +22,7 @@ class CheckoutController extends Controller
             $subtotal += $item['price'] * $item['quantity'];
         }
 
-        return view('shop.checkout', compact('cart', 'subtotal'));
+        return view('tienda.checkout', compact('cart', 'subtotal'));
     }
 
     public function process(Request $request)
@@ -80,6 +80,6 @@ class CheckoutController extends Controller
     public function success($orderNumber)
     {
         $order = Order::with('items')->where('order_number', $orderNumber)->firstOrFail();
-        return view('shop.success', compact('order'));
+        return view('tienda.success', compact('order'));
     }
 }

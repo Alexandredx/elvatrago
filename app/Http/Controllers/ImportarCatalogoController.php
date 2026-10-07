@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -9,7 +9,7 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class ImportCatalogController extends Controller
+class ImportarCatalogoController extends Controller
 {
     public function index(Request $request)
     {
@@ -570,7 +570,7 @@ class ImportCatalogController extends Controller
         // Fetch already imported external URLs to prevent duplicate import buttons
         $importedUrls = Product::pluck('external_url')->filter()->toArray();
 
-        return view('admin.import.index', compact('externalCatalog', 'categories', 'importedUrls'));
+        return view('importar.index', compact('externalCatalog', 'categories', 'importedUrls'));
     }
 
     public function store(Request $request)
@@ -659,3 +659,4 @@ class ImportCatalogController extends Controller
         return back()->with('success', "¡Producto '{$product->title}' importado con éxito a tu catálogo público!");
     }
 }
+

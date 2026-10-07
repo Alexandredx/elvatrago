@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class ProductController extends Controller
+class ProductoController extends Controller
 {
     public function index(Request $request)
     {
@@ -24,13 +23,13 @@ class ProductController extends Controller
         }
 
         $products = $query->latest()->paginate(15);
-        return view('admin.products.index', compact('products'));
+        return view('productos.index', compact('products'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.create', compact('categories'));
+        return view('productos.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -59,49 +58,51 @@ class ProductController extends Controller
         }
 
         $product = Product::create([
+            'category_id' => $request->category_id,
             'title' => $request->title,
             'slug' => $slug,
-            'category_id' => $request->category_id,
+            'short_description' => $request->short_description,
+            'description' => $request->description,
             'price' => $request->price,
             'sale_price' => $request->sale_price,
             'type' => $request->type,
-            'external_url' => $request->type === 'affiliate' ? $request->external_url : null,
-            'platform_name' => $request->type === 'affiliate' ? ($request->platform_name ?? 'affiliate') : null,
+            'external_url' => $request->external_url,
+            'platform_name' => $request->platform_name,
             'stock' => $request->type === 'direct' ? ($request->stock ?? 0) : 0,
-            'short_description' => $request->short_description,
-            'description' => $request->description,
             'is_featured' => $request->has('is_featured'),
-            'is_active' => $request->has('is_active') ? true : true,
+            'is_active' => $request->has('is_active'),
         ]);
 
-        // Process File Uploads
+        // Upload local images
         if ($request->hasFile('images')) {
-            $isPrimary = true;
+            $first = true;
             foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('products', 'public');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/products'), $filename);
+
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image_path' => $path,
-                    'is_primary' => $isPrimary,
+                    'image_path' => 'uploads/products/' . $filename,
+                    'is_primary' => $first,
                     'sort_order' => $index + 1,
                 ]);
-                $isPrimary = false;
+                $first = false;
             }
         }
 
-        // Process Image URLs (if provided)
+        // Add external image URLs
         if ($request->filled('image_urls')) {
-            $urls = array_map('trim', explode("\n", $request->image_urls));
-            $isPrimary = $product->images()->count() === 0;
-            foreach ($urls as $index => $url) {
+            $urls = array_filter(array_map('trim', explode("\n", $request->image_urls)));
+            $isFirst = !$product->images()->exists();
+            foreach ($urls as $i => $url) {
                 if (filter_var($url, FILTER_VALIDATE_URL)) {
                     ProductImage::create([
                         'product_id' => $product->id,
                         'image_path' => $url,
-                        'is_primary' => $isPrimary,
-                        'sort_order' => $index + 10,
+                        'is_primary' => $isFirst,
+                        'sort_order' => 10 + $i,
                     ]);
-                    $isPrimary = false;
+                    $isFirst = false;
                 }
             }
         }
@@ -113,7 +114,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $product->load('images');
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('productos.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, Product $product)
@@ -134,49 +135,43 @@ class ProductController extends Controller
         ]);
 
         $product->update([
-            'title' => $request->title,
             'category_id' => $request->category_id,
+            'title' => $request->title,
+            'short_description' => $request->short_description,
+            'description' => $request->description,
             'price' => $request->price,
             'sale_price' => $request->sale_price,
             'type' => $request->type,
-            'external_url' => $request->type === 'affiliate' ? $request->external_url : null,
-            'platform_name' => $request->type === 'affiliate' ? ($request->platform_name ?? 'affiliate') : null,
+            'external_url' => $request->external_url,
+            'platform_name' => $request->platform_name,
             'stock' => $request->type === 'direct' ? ($request->stock ?? 0) : 0,
-            'short_description' => $request->short_description,
-            'description' => $request->description,
             'is_featured' => $request->has('is_featured'),
             'is_active' => $request->has('is_active'),
         ]);
 
-        // Process File Uploads
         if ($request->hasFile('images')) {
-            $currentMaxSort = $product->images()->max('sort_order') ?? 0;
-            $hasPrimary = $product->images()->where('is_primary', true)->exists();
-            
-            foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('products', 'public');
+            foreach ($request->file('images') as $file) {
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/products'), $filename);
+
                 ProductImage::create([
                     'product_id' => $product->id,
-                    'image_path' => $path,
-                    'is_primary' => !$hasPrimary && $index === 0,
-                    'sort_order' => $currentMaxSort + $index + 1,
+                    'image_path' => 'uploads/products/' . $filename,
+                    'is_primary' => false,
+                    'sort_order' => 20,
                 ]);
             }
         }
 
-        // Process Additional Image URLs
         if ($request->filled('image_urls')) {
-            $urls = array_map('trim', explode("\n", $request->image_urls));
-            $currentMaxSort = $product->images()->max('sort_order') ?? 0;
-            $hasPrimary = $product->images()->where('is_primary', true)->exists();
-
-            foreach ($urls as $index => $url) {
+            $urls = array_filter(array_map('trim', explode("\n", $request->image_urls)));
+            foreach ($urls as $url) {
                 if (filter_var($url, FILTER_VALIDATE_URL)) {
                     ProductImage::create([
                         'product_id' => $product->id,
                         'image_path' => $url,
-                        'is_primary' => !$hasPrimary && $index === 0,
-                        'sort_order' => $currentMaxSort + $index + 1,
+                        'is_primary' => false,
+                        'sort_order' => 30,
                     ]);
                 }
             }
@@ -193,7 +188,8 @@ class ProductController extends Controller
 
     public function deleteImage(ProductImage $image)
     {
+        $productId = $image->product_id;
         $image->delete();
-        return back()->with('success', 'Imagen eliminada.');
+        return redirect()->route('admin.products.edit', $productId)->with('success', 'Imagen eliminada.');
     }
 }

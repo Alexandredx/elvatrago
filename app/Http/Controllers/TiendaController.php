@@ -6,7 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class TiendaController extends Controller
 {
     public function index(Request $request)
     {
@@ -61,7 +61,7 @@ class ProductController extends Controller
             ->take(6)
             ->get();
 
-        return view('shop.index', compact('products', 'categories', 'featuredProducts'));
+        return view('tienda.index', compact('products', 'categories', 'featuredProducts'));
     }
 
     public function show($slug)
@@ -75,6 +75,6 @@ class ProductController extends Controller
             ->take(4)
             ->get();
 
-        return view('shop.show', compact('product', 'relatedProducts'));
+        return view('tienda.show', compact('product', 'relatedProducts'));
     }
 }

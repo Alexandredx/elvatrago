@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\ClickLog;
 use App\Models\Order;
 use App\Models\Product;
@@ -29,7 +28,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact(
+        return view('dashboard', compact(
             'totalProducts',
             'directProducts',
             'affiliateProducts',
