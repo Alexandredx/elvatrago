@@ -13,24 +13,6 @@
     <p class="hero-subtitle">
         Descubre nuestra selección de tecnología, sonido, accesorios y Smart Living con los mejores precios del mercado.
     </p>
-
-    @if(auth()->check() && auth()->user()->isAdmin())
-        <!-- Admin Modality Switcher -->
-        <div style="display: inline-flex; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.35rem; border-radius: 9999px; gap: 0.35rem; flex-wrap: wrap; justify-content: center;">
-            <a href="{{ route('shop.index', array_merge(request()->except('type', 'platform', 'page'))) }}" 
-               class="pill-item {{ !request('type') ? 'active' : '' }}">
-               <i data-feather="grid" style="width: 14px; height: 14px; vertical-align: middle;"></i> Todos (Admin)
-            </a>
-            <a href="{{ route('shop.index', array_merge(request()->except('page', 'platform'), ['type' => 'direct'])) }}" 
-               class="pill-item {{ request('type') == 'direct' ? 'active' : '' }}" style="border-color: rgba(16, 185, 129, 0.3);">
-               <i data-feather="shopping-bag" style="width: 14px; height: 14px; vertical-align: middle; color: #34d399;"></i> Venta Directa
-            </a>
-            <a href="{{ route('shop.index', array_merge(request()->except('page', 'platform'), ['type' => 'affiliate'])) }}" 
-               class="pill-item {{ request('type') == 'affiliate' ? 'active' : '' }}" style="border-color: rgba(255, 71, 71, 0.3);">
-               <i data-feather="external-link" style="width: 14px; height: 14px; vertical-align: middle; color: #ff6b6b;"></i> Afiliados
-            </a>
-        </div>
-    @endif
 </div>
 
 <!-- Categories Filter Bar -->
@@ -68,25 +50,11 @@
     <div class="products-grid">
         @foreach($products as $product)
             <div class="product-card">
-                <!-- Thumbnail & Badge -->
+                <!-- Thumbnail -->
                 <div class="product-card-thumb">
                     <a href="{{ route('shop.show', $product->slug) }}">
                         <img src="{{ $product->primary_image_url }}" alt="{{ $product->title }}" loading="lazy">
                     </a>
-
-                    @if(auth()->check() && auth()->user()->isAdmin())
-                        <div class="badge-overlay">
-                            @if($product->isDirect())
-                                <span class="badge badge-direct">
-                                    <i data-feather="check-circle" style="width: 12px; height: 12px;"></i> Stock Directo
-                                </span>
-                            @else
-                                <span class="badge badge-aliexpress">
-                                    <i data-feather="external-link" style="width: 12px; height: 12px;"></i> Afiliado
-                                </span>
-                            @endif
-                        </div>
-                    @endif
                 </div>
 
                 <!-- Card Body -->

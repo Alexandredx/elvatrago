@@ -34,6 +34,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Client orders relationship.
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

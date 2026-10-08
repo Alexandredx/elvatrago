@@ -19,16 +19,6 @@ class TiendaController extends Controller
             });
         }
 
-        // Filter by Type: direct, affiliate
-        if ($request->has('type') && in_array($request->type, ['direct', 'affiliate'])) {
-            $query->where('type', $request->type);
-        }
-
-        // Filter by Platform
-        if ($request->has('platform') && !empty($request->platform)) {
-            $query->where('platform_name', $request->platform);
-        }
-
         // Search query
         if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;

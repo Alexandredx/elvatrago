@@ -29,10 +29,7 @@
             <!-- Search Bar -->
             <form action="{{ route('shop.index') }}" method="GET" class="search-form">
                 <i data-feather="search" class="search-icon"></i>
-                <input type="text" name="search" class="search-input" placeholder="Buscar productos, gadgets, ofertas..." value="{{ request('search') }}">
-                @if(request('type'))
-                    <input type="hidden" name="type" value="{{ request('type') }}">
-                @endif
+                <input type="text" name="search" class="search-input" placeholder="Buscar productos en la tienda..." value="{{ request('search') }}">
                 @if(request('category'))
                     <input type="hidden" name="category" value="{{ request('category') }}">
                 @endif
@@ -76,6 +73,26 @@
                         <span class="cart-badge">{{ $cartCount }}</span>
                     @endif
                 </a>
+
+                <!-- Opción Pedidos (Historial y compras del cliente) -->
+                <a href="{{ route('client.orders.index') }}" class="nav-btn" style="background: {{ request()->routeIs('client.orders.*') ? 'rgba(99, 102, 241, 0.25)' : 'rgba(30, 41, 59, 0.8)' }}; border: 1px solid {{ request()->routeIs('client.orders.*') ? 'rgba(99, 102, 241, 0.5)' : 'rgba(255, 255, 255, 0.12)' }}; color: {{ request()->routeIs('client.orders.*') ? '#ffffff' : '#f1f5f9' }}; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.95rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease;">
+                    <i data-feather="package" style="width: 16px; height: 16px; color: #818cf8;"></i>
+                    <span>Pedidos</span>
+                    @auth
+                        @php
+                            $userOrdersCount = \App\Models\Order::where(function($q) {
+                                $q->where('user_id', Auth::id())
+                                  ->orWhere('customer_email', Auth::user()->email);
+                            })->count();
+                        @endphp
+                        @if($userOrdersCount > 0)
+                            <span style="background: #6366f1; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; border-radius: 9999px; min-width: 18px; text-align: center;">
+                                {{ $userOrdersCount }}
+                            </span>
+                        @endif
+                    @endauth
+                </a>
+
 
                 @auth
                     <div style="display: flex; align-items: center; gap: 0.75rem; margin-left: 0.5rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.75rem;">
@@ -133,9 +150,10 @@
             <div>
                 <span style="font-weight: 700; color: #f8fafc;">Elvatrago E-Commerce</span> &copy; {{ date('Y') }} — Todos los derechos reservados.
             </div>
-            <div style="display: flex; gap: 1.5rem;">
-                <a href="{{ route('shop.index', ['type' => 'direct']) }}" style="color: #34d399;">Venta Directa</a>
-                <a href="{{ route('shop.index', ['type' => 'affiliate']) }}" style="color: #ff6b6b;">Catálogo Afiliados</a>
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                <a href="{{ route('shop.index') }}" style="color: #cbd5e1;">Catálogo</a>
+                <a href="{{ route('cart.index') }}" style="color: #34d399;">Carrito</a>
+                <a href="{{ route('returns.public.create') }}" style="color: #818cf8; text-decoration: none;">Solicitud de Devolución</a>
                 <a href="{{ route('admin.dashboard') }}" style="color: #a855f7;">Administración</a>
             </div>
         </div>

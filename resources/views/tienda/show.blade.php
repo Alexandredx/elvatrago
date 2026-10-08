@@ -21,20 +21,6 @@
             <!-- Main Featured Image -->
             <div style="width: 100%; height: 420px; background: #0f172a; border-radius: 1.25rem; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; position: relative; margin-bottom: 1rem;">
                 <img id="mainProductImg" src="{{ $product->primary_image_url }}" alt="{{ $product->title }}" style="width: 100%; height: 100%; object-fit: cover; transition: all 0.3s ease;">
-                
-                @if(auth()->check() && auth()->user()->isAdmin())
-                    <div style="position: absolute; top: 1rem; left: 1rem;">
-                        @if($product->isDirect())
-                            <span class="badge badge-direct" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">
-                                <i data-feather="check-circle" style="width: 14px; height: 14px;"></i> Stock Venta Directa
-                            </span>
-                        @else
-                            <span class="badge badge-aliexpress" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">
-                                <i data-feather="external-link" style="width: 14px; height: 14px;"></i> Oferta Afiliada
-                            </span>
-                        @endif
-                    </div>
-                @endif
             </div>
 
             <!-- Thumbnails Carousel / Grid -->

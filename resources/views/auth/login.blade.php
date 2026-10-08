@@ -81,25 +81,23 @@
                 </button>
             </form>
 
-            <!-- Demo Account Info Box -->
-            <div style="margin-top: 1.75rem; background: rgba(99, 102, 241, 0.1); border: 1px dashed rgba(99, 102, 241, 0.3); padding: 1rem; border-radius: 0.75rem; font-size: 0.825rem; color: #a5b4fc;">
-                <div style="font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.35rem;">
-                    <i data-feather="key" style="width: 14px; height: 14px;"></i> Cuentas Demo Disponibles:
-                </div>
-                <div style="margin-bottom: 0.35rem; padding-bottom: 0.35rem; border-bottom: 1px solid rgba(255,255,255,0.08);">
-                    <span style="color: #fb923c; font-weight: 700;">🛡️ Administrador (Gestión & Productos):</span><br>
-                    <strong>Email:</strong> admin@elvatrago.com | <strong>Pass:</strong> password
-                </div>
-                <div>
-                    <span style="color: #34d399; font-weight: 700;">🛍️ Cliente (Ver & Comprar):</span><br>
-                    <strong>Email:</strong> cliente@elvatrago.com | <strong>Pass:</strong> password
-                </div>
+            <!-- Footer Switch -->
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <p style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 0.75rem;">¿No tienes una cuenta aún?</p>
+                <a href="{{ route('register') }}" style="display: block; width: 100%; padding: 0.75rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; border-radius: 0.75rem; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease;">
+                    ✨ Registrarse Gratis
+                </a>
             </div>
 
-            <!-- Footer Switch -->
-            <div style="margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: #94a3b8;">
-                ¿No tienes una cuenta aún? 
-                <a href="{{ route('register') }}" style="color: #818cf8; font-weight: 700;">Regístrate aquí</a>
+            <!-- Demo Account Info Box -->
+            <div style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.6); border: 1px dashed rgba(255, 255, 255, 0.15); padding: 0.85rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; color: #94a3b8;">
+                <div style="font-weight: 700; color: #cbd5e1; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+                    <i data-feather="key" style="width: 13px; height: 13px;"></i> Cuentas Demo Rápidas:
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                    <span>🛡️ Admin: admin@elvatrago.com</span>
+                    <span>🛍️ Cliente: cliente@elvatrago.com</span>
+                </div>
             </div>
         </div>
     </div>

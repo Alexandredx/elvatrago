@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ClickLog;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ReturnRequest;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -12,32 +13,25 @@ class DashboardController extends Controller
     public function index()
     {
         $totalProducts = Product::count();
-        $directProducts = Product::where('type', 'direct')->count();
-        $affiliateProducts = Product::where('type', 'affiliate')->count();
+        $activeProducts = Product::where('is_active', true)->count();
+        $lowStockProducts = Product::where('stock', '<=', 5)->count();
         $totalOrders = Order::count();
         $totalRevenue = Order::where('status', '!=', 'cancelled')->sum('total_amount');
-        $totalClicks = ClickLog::count();
+        $pendingReturns = ReturnRequest::where('status', 'pending')->count();
 
-        $recentClickLogs = ClickLog::with('product')->latest()->take(8)->get();
-        $recentOrders = Order::latest()->take(5)->get();
-
-        // Top clicked affiliate products
-        $topAffiliates = Product::where('type', 'affiliate')
-            ->withCount('clickLogs')
-            ->orderBy('click_logs_count', 'desc')
-            ->take(5)
-            ->get();
+        $recentOrders = Order::latest()->take(6)->get();
+        $latestProducts = Product::with('category')->latest()->take(5)->get();
 
         return view('dashboard', compact(
             'totalProducts',
-            'directProducts',
-            'affiliateProducts',
+            'activeProducts',
+            'lowStockProducts',
             'totalOrders',
             'totalRevenue',
-            'totalClicks',
-            'recentClickLogs',
+            'pendingReturns',
             'recentOrders',
-            'topAffiliates'
+            'latestProducts'
         ));
     }
 }
+

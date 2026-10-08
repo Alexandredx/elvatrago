@@ -25,7 +25,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('shop.index'))->with('success', '¡Bienvenido de nuevo!');
+            
+            if (Auth::user()->isAdmin()) {
+                return redirect()->intended(route('admin.dashboard'))->with('success', '¡Bienvenido de nuevo, ' . Auth::user()->name . '!');
+            }
+            
+            return redirect()->intended(route('shop.index'))->with('success', '¡Bienvenido de nuevo, ' . Auth::user()->name . '!');
         }
 
         return back()->withErrors([
@@ -46,15 +51,17 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
 
+        // Todas las nuevas cuentas registradas son estrictamente Clientes
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user',
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('shop.index')->with('success', '¡Cuenta creada exitosamente! Bienvenido a Elvatrago.');
+        return redirect()->route('shop.index')->with('success', '¡Cuenta creada exitosamente! Bienvenido a Elvatrago, ' . $user->name . '.');
     }
 
     public function logout(Request $request)

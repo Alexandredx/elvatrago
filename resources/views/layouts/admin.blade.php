@@ -27,19 +27,11 @@
 
             <nav style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: auto;">
                 <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.dashboard') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.dashboard') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
-                    <i data-feather="grid"></i> Dashboard & Analytics
+                    <i data-feather="grid"></i> Dashboard
                 </a>
 
                 <a href="{{ route('admin.products.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.products.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.products.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
-                    <i data-feather="package"></i> Productos (Shopify & Afiliados)
-                </a>
-
-                <a href="{{ route('admin.import.index', ['platform' => 'aliexpress']) }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request('platform') == 'aliexpress' ? '#ffffff' : '#94a3b8' }}; background: {{ request('platform') == 'aliexpress' ? 'rgba(255, 71, 71, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
-                    <i data-feather="shopping-bag" style="color: #ff6b6b;"></i> Catálogo AliExpress
-                </a>
-
-                <a href="{{ route('admin.import.index', ['platform' => 'temu']) }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request('platform') == 'temu' ? '#ffffff' : '#94a3b8' }}; background: {{ request('platform') == 'temu' ? 'rgba(255, 106, 0, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
-                    <i data-feather="grid" style="color: #fb923c;"></i> Catálogo Temu
+                    <i data-feather="package"></i> Productos
                 </a>
 
                 <a href="{{ route('admin.categories.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.categories.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.categories.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
@@ -47,9 +39,24 @@
                 </a>
 
                 <a href="{{ route('admin.orders.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.orders.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.orders.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
-                    <i data-feather="shopping-cart"></i> Órdenes de Venta Directa
+                    <i data-feather="shopping-cart"></i> Pedidos
+                </a>
+
+                <a href="{{ route('admin.returns.index') }}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.returns.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.returns.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i data-feather="rotate-ccw"></i> Solicitud de Devolución
+                    </span>
+                    @php
+                        $pendingReturnsCount = \App\Models\ReturnRequest::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingReturnsCount > 0)
+                        <span style="background: rgba(245, 158, 11, 0.25); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; border-radius: 9999px;">
+                            {{ $pendingReturnsCount }}
+                        </span>
+                    @endif
                 </a>
             </nav>
+
 
             <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="font-size: 0.825rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">

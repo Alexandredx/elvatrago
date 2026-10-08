@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta - Elvatrago</title>
+    <title>Crear Cuenta de Cliente - Elvatrago</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
                 <i data-feather="shopping-bag" style="width: 32px; height: 32px; color: #6366f1;"></i>
                 <span>ELVATRAGO</span>
             </a>
-            <p style="color: #94a3b8; font-size: 0.95rem;">Crea tu cuenta gratis para comenzar</p>
+            <p style="color: #94a3b8; font-size: 0.95rem;">Crea tu cuenta de cliente para comprar en la tienda</p>
         </div>
 
         <!-- Glassmorphism Card -->
@@ -49,7 +49,7 @@
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Nombre Completo</label>
                     <div style="position: relative;">
                         <i data-feather="user" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; width: 18px; height: 18px;"></i>
-                        <input type="text" name="name" required value="{{ old('name') }}" placeholder="Juan Pérez" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
+                        <input type="text" name="name" required value="{{ old('name') }}" placeholder="Tu nombre y apellido" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
                     </div>
                 </div>
 
@@ -57,7 +57,7 @@
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Correo Electrónico</label>
                     <div style="position: relative;">
                         <i data-feather="mail" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; width: 18px; height: 18px;"></i>
-                        <input type="email" name="email" required value="{{ old('email') }}" placeholder="tu@correo.com" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
+                        <input type="email" name="email" required value="{{ old('email') }}" placeholder="correo@ejemplo.com" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
                     </div>
                 </div>
 
@@ -78,7 +78,7 @@
                 </div>
 
                 <button type="submit" style="width: 100%; padding: 0.85rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4); transition: all 0.3s ease;">
-                    Crear Cuenta
+                    Crear Cuenta de Cliente
                 </button>
             </form>
 

@@ -12,10 +12,14 @@ class ProductoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'images'])->withCount('clickLogs');
+        $query = Product::with(['category', 'images']);
 
-        if ($request->has('type') && in_array($request->type, ['direct', 'affiliate'])) {
-            $query->where('type', $request->type);
+        if ($request->has('category') && !empty($request->category)) {
+            $query->where('category_id', $request->category);
+        }
+
+        if ($request->has('status') && $request->status !== '') {
+            $query->where('is_active', $request->status == 'active');
         }
 
         if ($request->has('search') && !empty($request->search)) {
@@ -23,7 +27,9 @@ class ProductoController extends Controller
         }
 
         $products = $query->latest()->paginate(15);
-        return view('productos.index', compact('products'));
+        $categories = Category::all();
+
+        return view('productos.index', compact('products', 'categories'));
     }
 
     public function create()
@@ -39,10 +45,7 @@ class ProductoController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
-            'type' => 'required|in:direct,affiliate',
-            'external_url' => 'nullable|required_if:type,affiliate|string',
-            'platform_name' => 'nullable|string',
-            'stock' => 'required_if:type,direct|integer|min:0',
+            'stock' => 'required|integer|min:0',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
@@ -65,19 +68,19 @@ class ProductoController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'sale_price' => $request->sale_price,
-            'type' => $request->type,
-            'external_url' => $request->external_url,
-            'platform_name' => $request->platform_name,
-            'stock' => $request->type === 'direct' ? ($request->stock ?? 0) : 0,
-            'is_featured' => $request->has('is_featured'),
-            'is_active' => $request->has('is_active'),
+            'type' => 'direct',
+            'external_url' => null,
+            'platform_name' => null,
+            'stock' => $request->stock ?? 0,
+            'is_featured' => $request->boolean('is_featured'),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
 
         // Upload local images
         if ($request->hasFile('images')) {
             $first = true;
             foreach ($request->file('images') as $index => $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('uploads/products'), $filename);
 
                 ProductImage::create([
@@ -90,7 +93,7 @@ class ProductoController extends Controller
             }
         }
 
-        // Add external image URLs
+        // Add image URLs
         if ($request->filled('image_urls')) {
             $urls = array_filter(array_map('trim', explode("\n", $request->image_urls)));
             $isFirst = !$product->images()->exists();
@@ -124,10 +127,7 @@ class ProductoController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
-            'type' => 'required|in:direct,affiliate',
-            'external_url' => 'nullable|required_if:type,affiliate|string',
-            'platform_name' => 'nullable|string',
-            'stock' => 'required_if:type,direct|integer|min:0',
+            'stock' => 'required|integer|min:0',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
@@ -141,23 +141,23 @@ class ProductoController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'sale_price' => $request->sale_price,
-            'type' => $request->type,
-            'external_url' => $request->external_url,
-            'platform_name' => $request->platform_name,
-            'stock' => $request->type === 'direct' ? ($request->stock ?? 0) : 0,
-            'is_featured' => $request->has('is_featured'),
-            'is_active' => $request->has('is_active'),
+            'type' => 'direct',
+            'external_url' => null,
+            'platform_name' => null,
+            'stock' => $request->stock ?? 0,
+            'is_featured' => $request->boolean('is_featured'),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('uploads/products'), $filename);
 
                 ProductImage::create([
                     'product_id' => $product->id,
                     'image_path' => 'uploads/products/' . $filename,
-                    'is_primary' => false,
+                    'is_primary' => !$product->images()->exists(),
                     'sort_order' => 20,
                 ]);
             }
@@ -170,7 +170,7 @@ class ProductoController extends Controller
                     ProductImage::create([
                         'product_id' => $product->id,
                         'image_path' => $url,
-                        'is_primary' => false,
+                        'is_primary' => !$product->images()->exists(),
                         'sort_order' => 30,
                     ]);
                 }

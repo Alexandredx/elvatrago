@@ -10,6 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'order_number',
         'customer_name',
         'customer_email',
@@ -19,6 +20,12 @@ class Order extends Model
         'status',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
     protected $casts = [
         'total_amount' => 'decimal:2',
     ];
@@ -27,4 +34,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function returnRequests()
+    {
+        return $this->hasMany(ReturnRequest::class);
+    }
 }
+
