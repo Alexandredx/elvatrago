@@ -48,8 +48,16 @@ class ProductoController extends Controller
             'stock' => 'required|integer|min:0',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|file|mimes:jpeg,png,jpg,webp,gif,svg,jfif,avif,bmp|max:20480',
             'image_urls' => 'nullable|string',
+        ], [
+            'images.*.file' => 'Uno de los archivos seleccionados no es un archivo válido.',
+            'images.*.mimes' => 'Las imágenes deben estar en formato JPG, PNG, WEBP, GIF, JFIF o AVIF.',
+            'images.*.max' => 'Cada imagen no debe superar los 20MB de tamaño.',
+            'title.required' => 'El título del producto es obligatorio.',
+            'category_id.required' => 'Debes seleccionar una categoría.',
+            'price.required' => 'El precio de venta es obligatorio.',
         ]);
 
         $slug = Str::slug($request->title);
@@ -78,18 +86,26 @@ class ProductoController extends Controller
 
         // Upload local images
         if ($request->hasFile('images')) {
+            $destination = public_path('uploads/products');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
+
             $first = true;
             foreach ($request->file('images') as $index => $file) {
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/products'), $filename);
+                if ($file && $file->isValid()) {
+                    $ext = $file->getClientOriginalExtension() ?: $file->guessExtension() ?: 'jpg';
+                    $filename = time() . '_' . uniqid() . '.' . strtolower($ext);
+                    $file->move($destination, $filename);
 
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => 'uploads/products/' . $filename,
-                    'is_primary' => $first,
-                    'sort_order' => $index + 1,
-                ]);
-                $first = false;
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => 'uploads/products/' . $filename,
+                        'is_primary' => $first,
+                        'sort_order' => $index + 1,
+                    ]);
+                    $first = false;
+                }
             }
         }
 
@@ -130,8 +146,16 @@ class ProductoController extends Controller
             'stock' => 'required|integer|min:0',
             'short_description' => 'nullable|string',
             'description' => 'nullable|string',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
+            'images' => 'nullable|array',
+            'images.*' => 'nullable|file|mimes:jpeg,png,jpg,webp,gif,svg,jfif,avif,bmp|max:20480',
             'image_urls' => 'nullable|string',
+        ], [
+            'images.*.file' => 'Uno de los archivos seleccionados no es un archivo válido.',
+            'images.*.mimes' => 'Las imágenes deben estar en formato JPG, PNG, WEBP, GIF, JFIF o AVIF.',
+            'images.*.max' => 'Cada imagen no debe superar los 20MB de tamaño.',
+            'title.required' => 'El título del producto es obligatorio.',
+            'category_id.required' => 'Debes seleccionar una categoría.',
+            'price.required' => 'El precio de venta es obligatorio.',
         ]);
 
         $product->update([
@@ -150,16 +174,26 @@ class ProductoController extends Controller
         ]);
 
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/products'), $filename);
+            $destination = public_path('uploads/products');
+            if (!file_exists($destination)) {
+                mkdir($destination, 0755, true);
+            }
 
-                ProductImage::create([
-                    'product_id' => $product->id,
-                    'image_path' => 'uploads/products/' . $filename,
-                    'is_primary' => !$product->images()->exists(),
-                    'sort_order' => 20,
-                ]);
+            $hasImages = $product->images()->exists();
+            foreach ($request->file('images') as $file) {
+                if ($file && $file->isValid()) {
+                    $ext = $file->getClientOriginalExtension() ?: $file->guessExtension() ?: 'jpg';
+                    $filename = time() . '_' . uniqid() . '.' . strtolower($ext);
+                    $file->move($destination, $filename);
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => 'uploads/products/' . $filename,
+                        'is_primary' => !$hasImages,
+                        'sort_order' => 20,
+                    ]);
+                    $hasImages = true;
+                }
             }
         }
 

@@ -53,8 +53,29 @@
                 <!-- Thumbnail -->
                 <div class="product-card-thumb">
                     <a href="{{ route('shop.show', $product->slug) }}">
-                        <img src="{{ $product->primary_image_url }}" alt="{{ $product->title }}" loading="lazy">
+                        <img id="cardImg-{{ $product->id }}" src="{{ $product->primary_image_url }}" alt="{{ $product->title }}" loading="lazy">
                     </a>
+
+                    @if($product->images->count() > 1)
+                        <!-- Flechas de navegación para tarjetas de catálogo -->
+                        <button type="button" 
+                                class="card-thumb-arrow thumb-arrow-prev" 
+                                onclick="event.preventDefault(); event.stopPropagation(); cycleCardImage({{ $product->id }}, -1)"
+                                aria-label="Foto anterior" 
+                                title="Foto anterior">
+                            <i data-feather="chevron-left" style="width: 14px; height: 14px;"></i>
+                        </button>
+                        <button type="button" 
+                                class="card-thumb-arrow thumb-arrow-next" 
+                                onclick="event.preventDefault(); event.stopPropagation(); cycleCardImage({{ $product->id }}, 1)"
+                                aria-label="Siguiente foto" 
+                                title="Siguiente foto">
+                            <i data-feather="chevron-right" style="width: 14px; height: 14px;"></i>
+                        </button>
+                        <div class="card-thumb-counter">
+                            <span id="cardImgIdx-{{ $product->id }}">1</span>/{{ $product->images->count() }}
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Card Body -->
@@ -98,4 +119,46 @@
         <a href="{{ route('shop.index') }}" class="pill-item active" style="display: inline-block;">Ver todo el catálogo</a>
     </div>
 @endif
+@endsection
+
+@section('scripts')
+<script>
+    const cardImagesMap = {
+        @foreach($products as $prod)
+            @if($prod->images->count() > 1)
+                {{ $prod->id }}: @json($prod->images->map(fn($img) => $img->url)),
+            @endif
+        @endforeach
+    };
+    const cardIndices = {};
+
+    function cycleCardImage(productId, step) {
+        const images = cardImagesMap[productId];
+        if (!images || images.length <= 1) return;
+
+        if (typeof cardIndices[productId] === 'undefined') {
+            cardIndices[productId] = 0;
+        }
+
+        let newIdx = cardIndices[productId] + step;
+        if (newIdx < 0) newIdx = images.length - 1;
+        if (newIdx >= images.length) newIdx = 0;
+
+        cardIndices[productId] = newIdx;
+
+        const imgEl = document.getElementById('cardImg-' + productId);
+        if (imgEl) {
+            imgEl.style.opacity = '0.4';
+            setTimeout(() => {
+                imgEl.src = images[newIdx];
+                imgEl.style.opacity = '1';
+            }, 100);
+        }
+
+        const idxEl = document.getElementById('cardImgIdx-' + productId);
+        if (idxEl) {
+            idxEl.textContent = newIdx + 1;
+        }
+    }
+</script>
 @endsection

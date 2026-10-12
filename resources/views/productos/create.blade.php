@@ -69,11 +69,11 @@
                     </div>
 
                     <!-- Upload Dropzone -->
-                    <div onclick="document.getElementById('imageFileInput').click()" style="border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#6366f1'; this.style.background='rgba(99, 102, 241, 0.08)'" onmouseout="this.style.borderColor='rgba(99, 102, 241, 0.4)'; this.style.background='rgba(15, 23, 42, 0.6)'">
+                    <div id="dropzoneCreate" onclick="document.getElementById('imageFileInput').click()" style="border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#6366f1'; this.style.background='rgba(99, 102, 241, 0.08)'" onmouseout="this.style.borderColor='rgba(99, 102, 241, 0.4)'; this.style.background='rgba(15, 23, 42, 0.6)'">
                         <i data-feather="upload-cloud" style="width: 40px; height: 40px; color: #6366f1; margin-bottom: 0.75rem;"></i>
                         <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem; margin-bottom: 0.25rem;">Haz clic para subir fotos o arrastra archivos aquí</div>
-                        <div style="color: #94a3b8; font-size: 0.8rem;">Formatos soportados: JPG, PNG, WEBP. Hasta 4MB por archivo.</div>
-                        <input type="file" id="imageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewFiles(this)">
+                        <div style="color: #94a3b8; font-size: 0.8rem;">Formatos soportados: JPG, PNG, WEBP, GIF, JFIF, AVIF. Hasta 20MB por archivo.</div>
+                        <input type="file" id="imageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewFiles(this)" onclick="event.stopPropagation()">
                     </div>
 
                     <!-- Live Preview Thumbnails Container -->
@@ -198,7 +198,7 @@
     function previewFiles(input) {
         const grid = document.getElementById('filePreviewGrid');
         grid.innerHTML = '';
-        if (input.files) {
+        if (input.files && input.files.length > 0) {
             Array.from(input.files).forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -215,6 +215,37 @@
                 reader.readAsDataURL(file);
             });
         }
+    }
+
+    // Drag & Drop
+    const dropzone = document.getElementById('dropzoneCreate');
+    const fileInput = document.getElementById('imageFileInput');
+    if (dropzone && fileInput) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.style.borderColor = '#6366f1';
+                dropzone.style.background = 'rgba(99, 102, 241, 0.15)';
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                dropzone.style.background = 'rgba(15, 23, 42, 0.6)';
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            if (dt && dt.files && dt.files.length > 0) {
+                fileInput.files = dt.files;
+                previewFiles(fileInput);
+            }
+        }, false);
     }
 
     function calculateDiscount() {

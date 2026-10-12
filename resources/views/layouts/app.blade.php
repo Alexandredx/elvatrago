@@ -13,6 +13,18 @@
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
     
+    <!-- Early Theme Detection (Evita parpadeos) -->
+    <script>
+        (function() {
+            try {
+                var savedTheme = localStorage.getItem('elvatrago_theme') || 'dark';
+                if (savedTheme === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } catch(e) {}
+        })();
+    </script>
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     @yield('styles')
@@ -37,23 +49,6 @@
 
             <!-- Navigation Action Buttons -->
             <div class="nav-actions">
-                <!-- Currency Switcher -->
-                @php
-                    $currentCurrency = session('currency', 'USD');
-                @endphp
-                <div style="display: flex; align-items: center; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 9999px; padding: 2px; margin-right: 0.25rem;">
-                    <a href="{{ route('currency.switch', 'USD') }}" 
-                       style="padding: 0.3rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-decoration: none; transition: all 0.2s ease; {{ $currentCurrency === 'USD' ? 'background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #ffffff; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);' : 'color: #94a3b8;' }}"
-                       title="Cambiar a Dólares (USD)">
-                       USD ($)
-                    </a>
-                    <a href="{{ route('currency.switch', 'PEN') }}" 
-                       style="padding: 0.3rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-decoration: none; transition: all 0.2s ease; {{ $currentCurrency === 'PEN' ? 'background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);' : 'color: #94a3b8;' }}"
-                       title="Cambiar a Soles (PEN)">
-                       PEN (S/.)
-                    </a>
-                </div>
-
                 @auth
                     @if(Auth::user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="nav-btn btn-admin">
@@ -93,31 +88,88 @@
                     @endauth
                 </a>
 
-
-                @auth
-                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-left: 0.5rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.75rem;">
+                <!-- Sección de Usuario y Configuración (Tuerquita al lado del usuario) -->
+                <div style="display: flex; align-items: center; gap: 0.65rem; margin-left: 0.5rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.75rem;">
+                    @auth
                         <span style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.35rem;" title="Rol: {{ Auth::user()->isAdmin() ? 'Administrador' : 'Cliente' }}">
                             <i data-feather="{{ Auth::user()->isAdmin() ? 'shield' : 'user' }}" style="width: 14px; height: 14px; color: {{ Auth::user()->isAdmin() ? '#fb923c' : '#a5b4fc' }};"></i> 
                             {{ Auth::user()->name }}
                         </span>
-
-                        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                            @csrf
-                            <button type="submit" title="Cerrar Sesión" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 0.45rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; transition: all 0.2s ease;">
-                                <i data-feather="log-out" style="width: 14px; height: 14px;"></i> Salir
-                            </button>
-                        </form>
-                    </div>
-                @else
-                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: 0.5rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.75rem;">
+                    @else
                         <a href="{{ route('login') }}" class="nav-btn btn-admin" style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
                             <i data-feather="log-in" style="width: 14px; height: 14px;"></i> Ingresar
                         </a>
                         <a href="{{ route('register') }}" class="nav-btn" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; font-size: 0.8rem; padding: 0.45rem 0.85rem;">
                             <i data-feather="user-plus" style="width: 14px; height: 14px;"></i> Registro
                         </a>
+                    @endauth
+
+                    <!-- Tuerquita de Configuración -->
+                    <div class="settings-dropdown-wrapper" id="settingsDropdownWrapper">
+                        <button type="button" 
+                                id="btnSettingsDropdown" 
+                                class="btn-gear-only" 
+                                aria-expanded="false" 
+                                aria-haspopup="true"
+                                title="Configuración">
+                            <i data-feather="settings" class="settings-gear-icon"></i>
+                        </button>
+
+                        <!-- Menú flotante con las opciones de Configuración -->
+                        <div id="settingsDropdownMenu" class="settings-dropdown-popover" style="display: none;">
+                            <div class="settings-dropdown-popover-header">
+                                <i data-feather="settings" style="width: 13px; height: 13px; color: #818cf8;"></i>
+                                <span>Configuración</span>
+                            </div>
+                            <div class="settings-dropdown-popover-content">
+                                <!-- Opción 1: Cambio de moneda -->
+                                <a href="{{ route('settings.currency') }}" class="settings-dropdown-link-item">
+                                    <div class="settings-link-left">
+                                        <div class="settings-link-icon-box">
+                                            <i data-feather="dollar-sign" style="width: 15px; height: 15px;"></i>
+                                        </div>
+                                        <div class="settings-link-info">
+                                            <span class="settings-link-title">Cambio de moneda</span>
+                                            <span class="settings-link-subtitle">Actual: {{ session('currency', 'USD') === 'PEN' ? 'Soles (S/.)' : 'Dólares ($)' }}</span>
+                                        </div>
+                                    </div>
+                                    <i data-feather="chevron-right" class="settings-link-arrow"></i>
+                                </a>
+
+                                <!-- Opción 2: Modo Claro / Oscuro -->
+                                <div class="settings-dropdown-link-item settings-theme-toggle-item" 
+                                     id="btnToggleTheme" 
+                                     onclick="toggleThemeMode()" 
+                                     role="button" 
+                                     tabindex="0"
+                                     title="Alternar entre modo claro y modo oscuro">
+                                    <div class="settings-link-left">
+                                        <div class="settings-link-icon-box theme-icon-box" id="themeIconContainer">
+                                            <i data-feather="moon" id="themeIconFeather" style="width: 15px; height: 15px;"></i>
+                                        </div>
+                                        <div class="settings-link-info">
+                                            <span class="settings-link-title">Tema Visual</span>
+                                            <span class="settings-link-subtitle" id="themeSubtitleLabel">Modo Oscuro</span>
+                                        </div>
+                                    </div>
+                                    <!-- Switch Toggle visual interactivo -->
+                                    <div class="theme-switch-control" id="themeSwitchControl">
+                                        <div class="theme-switch-knob"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                @endauth
+
+                    @auth
+                        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" title="Cerrar Sesión" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 0.45rem 0.75rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; transition: all 0.2s ease;">
+                                <i data-feather="log-out" style="width: 14px; height: 14px;"></i> Salir
+                            </button>
+                        </form>
+                    @endauth
+                </div>
             </div>
         </div>
     </nav>
@@ -161,6 +213,88 @@
 
     <script>
         feather.replace();
+
+        // Función para actualizar los elementos visuales del tema (icono, texto)
+        function updateThemeUI(theme) {
+            const subtitle = document.getElementById('themeSubtitleLabel');
+            const iconContainer = document.getElementById('themeIconContainer');
+            
+            if (theme === 'light') {
+                if (subtitle) subtitle.textContent = 'Modo Claro';
+                if (iconContainer) {
+                    iconContainer.innerHTML = '<i data-feather="sun" style="width: 15px; height: 15px;"></i>';
+                    iconContainer.classList.add('is-light-theme');
+                }
+            } else {
+                if (subtitle) subtitle.textContent = 'Modo Oscuro';
+                if (iconContainer) {
+                    iconContainer.innerHTML = '<i data-feather="moon" style="width: 15px; height: 15px;"></i>';
+                    iconContainer.classList.remove('is-light-theme');
+                }
+            }
+            if (window.feather) feather.replace();
+        }
+
+        // Alternar entre modo claro y modo oscuro
+        function toggleThemeMode() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            if (newTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                try { localStorage.setItem('elvatrago_theme', 'light'); } catch(e) {}
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                try { localStorage.setItem('elvatrago_theme', 'dark'); } catch(e) {}
+            }
+            
+            updateThemeUI(newTheme);
+        }
+
+        // Control del desplegable de configuración (Tuerquita)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar estado del tema visual
+            const currentTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            updateThemeUI(currentTheme);
+
+            const btnSettings = document.getElementById('btnSettingsDropdown');
+            const settingsMenu = document.getElementById('settingsDropdownMenu');
+            const settingsWrapper = document.getElementById('settingsDropdownWrapper');
+
+            if (btnSettings && settingsMenu) {
+                btnSettings.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isHidden = settingsMenu.style.display === 'none' || settingsMenu.style.display === '';
+                    if (isHidden) {
+                        settingsMenu.style.display = 'block';
+                        btnSettings.classList.add('is-open');
+                        btnSettings.setAttribute('aria-expanded', 'true');
+                    } else {
+                        settingsMenu.style.display = 'none';
+                        btnSettings.classList.remove('is-open');
+                        btnSettings.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Cerrar al hacer clic fuera
+                document.addEventListener('click', function(e) {
+                    if (settingsWrapper && !settingsWrapper.contains(e.target)) {
+                        settingsMenu.style.display = 'none';
+                        btnSettings.classList.remove('is-open');
+                        btnSettings.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Cerrar con Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        settingsMenu.style.display = 'none';
+                        btnSettings.classList.remove('is-open');
+                        btnSettings.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+        });
     </script>
     @yield('scripts')
 </body>

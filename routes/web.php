@@ -25,10 +25,27 @@ Route::get('/product/{slug}', [TiendaController::class, 'show'])->name('shop.sho
 Route::get('/solicitar-devolucion', [ReturnRequestController::class, 'showPublicForm'])->name('returns.public.create');
 Route::post('/solicitud-devolucion', [ReturnRequestController::class, 'storePublic'])->name('returns.public.store');
 
-// Selector de Moneda (USD / PEN)
+// Selector y Configuración de Moneda (USD / PEN)
+Route::get('/configuracion/moneda', function () {
+    return view('tienda.moneda');
+})->name('settings.currency');
+
+Route::post('/configuracion/moneda', function (\Illuminate\Http\Request $request) {
+    $code = strtoupper($request->input('currency', 'USD'));
+    if (in_array($code, ['USD', 'PEN'])) {
+        session(['currency' => $code]);
+        $nombre = $code === 'PEN' ? 'Soles Peruanos (PEN - S/.)' : 'Dólares Americanos (USD - $)';
+        return redirect()->route('settings.currency')->with('success', "¡Moneda actualizada exitosamente a {$nombre}! Ahora todos los productos se mostrarán en esta moneda.");
+    }
+    return back()->with('error', 'Moneda seleccionada no válida.');
+})->name('settings.currency.update');
+
 Route::get('/currency/{code}', function ($code) {
-    if (in_array(strtoupper($code), ['USD', 'PEN'])) {
-        session(['currency' => strtoupper($code)]);
+    $codeUpper = strtoupper($code);
+    if (in_array($codeUpper, ['USD', 'PEN'])) {
+        session(['currency' => $codeUpper]);
+        $nombre = $codeUpper === 'PEN' ? 'Soles Peruanos (PEN - S/.)' : 'Dólares Americanos (USD - $)';
+        return back()->with('success', "Moneda cambiada a {$nombre}.");
     }
     return back();
 })->name('currency.switch');

@@ -2,7 +2,7 @@
 
 @section('title', 'Gestión de Órdenes - Admin')
 
-@section('content')
+@section('content') 
 <div style="margin-bottom: 2rem;">
     <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff;">Órdenes de Venta Directa</h1>
     <p style="color: #94a3b8; font-size: 0.9rem;">Revisa y actualiza los pedidos de ventas directas realizados en la tienda.</p>

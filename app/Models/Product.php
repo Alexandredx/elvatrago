@@ -72,10 +72,7 @@ class Product extends Model
     {
         $primary = $this->images->where('is_primary', true)->first() ?? $this->images->first();
         if ($primary) {
-            if (str_starts_with($primary->image_path, 'http://') || str_starts_with($primary->image_path, 'https://')) {
-                return $primary->image_path;
-            }
-            return asset('storage/' . $primary->image_path);
+            return $primary->url;
         }
         return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80';
     }

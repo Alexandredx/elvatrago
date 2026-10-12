@@ -96,11 +96,11 @@
                     @endif
 
                     <!-- Upload More Dropzone -->
-                    <div onclick="document.getElementById('editImageFileInput').click()" style="border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 1.75rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;">
+                    <div id="dropzoneEdit" onclick="document.getElementById('editImageFileInput').click()" style="border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 1.75rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;">
                         <i data-feather="upload-cloud" style="width: 32px; height: 32px; color: #6366f1; margin-bottom: 0.5rem;"></i>
                         <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem;">Subir nuevas fotos para este producto</div>
-                        <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.2rem;">JPG, PNG, WEBP (Hasta 4MB)</div>
-                        <input type="file" id="editImageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewEditFiles(this)">
+                        <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.2rem;">JPG, PNG, WEBP, GIF, JFIF, AVIF (Hasta 20MB)</div>
+                        <input type="file" id="editImageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewEditFiles(this)" onclick="event.stopPropagation()">
                     </div>
 
                     <div id="editFilePreviewGrid" style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;"></div>
@@ -232,7 +232,7 @@
     function previewEditFiles(input) {
         const grid = document.getElementById('editFilePreviewGrid');
         grid.innerHTML = '';
-        if (input.files) {
+        if (input.files && input.files.length > 0) {
             Array.from(input.files).forEach((file) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -249,6 +249,37 @@
                 reader.readAsDataURL(file);
             });
         }
+    }
+
+    // Drag & Drop
+    const dropzoneEdit = document.getElementById('dropzoneEdit');
+    const editFileInput = document.getElementById('editImageFileInput');
+    if (dropzoneEdit && editFileInput) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzoneEdit.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzoneEdit.style.borderColor = '#6366f1';
+                dropzoneEdit.style.background = 'rgba(99, 102, 241, 0.15)';
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzoneEdit.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzoneEdit.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                dropzoneEdit.style.background = 'rgba(15, 23, 42, 0.6)';
+            }, false);
+        });
+
+        dropzoneEdit.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            if (dt && dt.files && dt.files.length > 0) {
+                editFileInput.files = dt.files;
+                previewEditFiles(editFileInput);
+            }
+        }, false);
     }
 
     function calculateDiscount() {
