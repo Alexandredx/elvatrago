@@ -62,15 +62,15 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <div>
                             <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
-                                <i data-feather="image" style="color: #6366f1; width: 18px; height: 18px;"></i> Archivos Multimedia
+                                <i data-feather="image" style="color: #f97316; width: 18px; height: 18px;"></i> Archivos Multimedia
                             </h3>
                             <p style="color: #94a3b8; font-size: 0.8rem; margin: 0.25rem 0 0;">Sube fotos desde tu dispositivo o ingresa enlaces directos.</p>
                         </div>
                     </div>
 
                     <!-- Upload Dropzone -->
-                    <div id="dropzoneCreate" onclick="document.getElementById('imageFileInput').click()" style="border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#6366f1'; this.style.background='rgba(99, 102, 241, 0.08)'" onmouseout="this.style.borderColor='rgba(99, 102, 241, 0.4)'; this.style.background='rgba(15, 23, 42, 0.6)'">
-                        <i data-feather="upload-cloud" style="width: 40px; height: 40px; color: #6366f1; margin-bottom: 0.75rem;"></i>
+                    <div id="dropzoneCreate" onclick="document.getElementById('imageFileInput').click()" style="border: 2px dashed rgba(249, 115, 22, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.borderColor='#f97316'; this.style.background='rgba(249, 115, 22, 0.08)'" onmouseout="this.style.borderColor='rgba(249, 115, 22, 0.4)'; this.style.background='rgba(15, 23, 42, 0.6)'">
+                        <i data-feather="upload-cloud" style="width: 40px; height: 40px; color: #f97316; margin-bottom: 0.75rem;"></i>
                         <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem; margin-bottom: 0.25rem;">Haz clic para subir fotos o arrastra archivos aquí</div>
                         <div style="color: #94a3b8; font-size: 0.8rem;">Formatos soportados: JPG, PNG, WEBP, GIF, JFIF, AVIF. Hasta 20MB por archivo.</div>
                         <input type="file" id="imageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewFiles(this)" onclick="event.stopPropagation()">
@@ -168,7 +168,7 @@
 
                     <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06);">
                         <label style="display: flex; align-items: center; gap: 0.65rem; color: #ffffff; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
-                            <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #6366f1;">
+                            <input type="checkbox" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #f97316;">
                             <span>⭐ Destacar en portada</span>
                         </label>
                         <p style="color: #94a3b8; font-size: 0.78rem; margin: 0.35rem 0 0 1.8rem;">Muestra este producto en la sección principal destacada.</p>
@@ -177,7 +177,7 @@
 
                 <!-- Action Buttons Box -->
                 <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <button type="submit" class="pill-item active" style="width: 100%; padding: 0.95rem; font-size: 1rem; font-weight: 800; border: none; cursor: pointer; text-align: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+                    <button type="submit" class="pill-item active" style="width: 100%; padding: 0.95rem; font-size: 1rem; font-weight: 800; border: none; cursor: pointer; text-align: center; justify-content: center; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);">
                         Guardar Producto
                     </button>
                     
@@ -225,8 +225,8 @@
             dropzone.addEventListener(eventName, (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                dropzone.style.borderColor = '#6366f1';
-                dropzone.style.background = 'rgba(99, 102, 241, 0.15)';
+                dropzone.style.borderColor = '#f97316';
+                dropzone.style.background = 'rgba(249, 115, 22, 0.15)';
             }, false);
         });
 
@@ -234,7 +234,7 @@
             dropzone.addEventListener(eventName, (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                dropzone.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                dropzone.style.borderColor = 'rgba(249, 115, 22, 0.4)';
                 dropzone.style.background = 'rgba(15, 23, 42, 0.6)';
             }, false);
         });

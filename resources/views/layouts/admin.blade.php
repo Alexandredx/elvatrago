@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Panel Admin - Elvatrago')</title>
+    <title>@yield('title', 'Panel Admin - GlobalClick')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         <aside class="admin-sidebar">
             <a href="{{ route('shop.index') }}" class="logo-brand" style="margin-bottom: 2rem;">
                 <i data-feather="shopping-bag"></i>
-                <span>ELVATRAGO</span>
+                <span>GlobalClick</span>
             </a>
 
             <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
@@ -26,23 +26,23 @@
             </div>
 
             <nav style="display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: auto;">
-                <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.dashboard') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.dashboard') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.dashboard') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.dashboard') ? 'rgba(249, 115, 22, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
                     <i data-feather="grid"></i> Dashboard
                 </a>
 
-                <a href="{{ route('admin.products.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.products.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.products.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                <a href="{{ route('admin.products.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.products.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.products.*') ? 'rgba(249, 115, 22, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
                     <i data-feather="package"></i> Productos
                 </a>
 
-                <a href="{{ route('admin.categories.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.categories.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.categories.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                <a href="{{ route('admin.categories.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.categories.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.categories.*') ? 'rgba(249, 115, 22, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
                     <i data-feather="tag"></i> Categorías
                 </a>
 
-                <a href="{{ route('admin.orders.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.orders.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.orders.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                <a href="{{ route('admin.orders.index') }}" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.orders.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.orders.*') ? 'rgba(249, 115, 22, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
                     <i data-feather="shopping-cart"></i> Pedidos
                 </a>
 
-                <a href="{{ route('admin.returns.index') }}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.returns.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.returns.*') ? 'rgba(99, 102, 241, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                <a href="{{ route('admin.returns.index') }}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.returns.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.returns.*') ? 'rgba(249, 115, 22, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
                     <span style="display: flex; align-items: center; gap: 0.75rem;">
                         <i data-feather="rotate-ccw"></i> Solicitud de Devolución
                     </span>
@@ -59,7 +59,7 @@
 
 
             <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; flex-direction: column; gap: 0.75rem;">
-                <div style="font-size: 0.825rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">
+                <div style="font-size: 0.825rem; font-weight: 700; color: #fdba74; display: flex; align-items: center; gap: 0.4rem;">
                     <i data-feather="shield" style="width: 14px; height: 14px; color: #fb923c;"></i>
                     {{ Auth::user()->name }} (Admin)
                 </div>

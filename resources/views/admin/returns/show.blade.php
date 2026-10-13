@@ -12,7 +12,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
                 <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
-                    <i data-feather="rotate-ccw" style="color: #818cf8;"></i>
+                    <i data-feather="rotate-ccw" style="color: #fb923c;"></i>
                     Solicitud: {{ $return->return_number }}
                 </h1>
                 <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.25rem;">
@@ -71,7 +71,7 @@
             <!-- Datos del Cliente -->
             <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.75rem;">
                 <h2 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-feather="user" style="color: #6366f1; width: 18px; height: 18px;"></i>
+                    <i data-feather="user" style="color: #f97316; width: 18px; height: 18px;"></i>
                     Información de Contacto del Cliente
                 </h2>
 
@@ -105,7 +105,7 @@
                             <i data-feather="shopping-cart" style="color: #10b981; width: 18px; height: 18px;"></i>
                             Orden Asociada: {{ $return->order->order_number }}
                         </h2>
-                        <a href="{{ route('admin.orders.show', $return->order->id) }}" style="color: #6366f1; font-size: 0.85rem; font-weight: 600; text-decoration: none;">
+                        <a href="{{ route('admin.orders.show', $return->order->id) }}" style="color: #f97316; font-size: 0.85rem; font-weight: 600; text-decoration: none;">
                             Ver Orden Completa &rarr;
                         </a>
                     </div>
@@ -136,7 +136,7 @@
         <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.25rem; padding: 1.75rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
                 <h3 style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-feather="settings" style="width: 16px; height: 16px; color: #818cf8;"></i>
+                    <i data-feather="settings" style="width: 16px; height: 16px; color: #fb923c;"></i>
                     Gestionar Solicitud
                 </h3>
 
@@ -176,7 +176,7 @@
                                   style="width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.75rem; color: #ffffff; font-size: 0.85rem; line-height: 1.5; resize: vertical;">{{ old('admin_notes', $return->admin_notes) }}</textarea>
                     </div>
 
-                    <button type="submit" style="width: 100%; padding: 0.85rem; background: #6366f1; border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s;">
+                    <button type="submit" style="width: 100%; padding: 0.85rem; background: #f97316; border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 700; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s;">
                         <i data-feather="save" style="width: 16px; height: 16px;"></i> Guardar Cambios
                     </button>
                 </form>

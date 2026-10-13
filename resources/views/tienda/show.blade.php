@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $product->title . ' - Elvatrago')
+@section('title', $product->title . ' - GlobalClick')
 
 @section('content')
 <div style="max-width: 1280px; margin: 2rem auto 4rem; padding: 0 1.5rem;">
@@ -10,7 +10,7 @@
         <i data-feather="chevron-right" style="width: 14px; height: 14px;"></i>
         <a href="{{ route('shop.index', ['category' => $product->category->slug ?? '']) }}" style="color: #cbd5e1;">{{ $product->category->name ?? 'General' }}</a>
         <i data-feather="chevron-right" style="width: 14px; height: 14px;"></i>
-        <span style="color: #6366f1; font-weight: 600;">{{ $product->title }}</span>
+        <span style="color: #f97316; font-weight: 600;">{{ $product->title }}</span>
     </div>
 
     <!-- Product Layout Grid -->
@@ -65,7 +65,7 @@
                     @foreach($product->images as $index => $img)
                         <div onclick="switchImage('{{ $img->url }}', this, {{ $index }})" 
                              data-index="{{ $index }}"
-                             style="width: 80px; height: 80px; background: #0f172a; border-radius: 0.75rem; border: 2px solid {{ $loop->first ? '#6366f1' : 'rgba(255,255,255,0.1)' }}; overflow: hidden; cursor: pointer; flex-shrink: 0; transition: all 0.2s ease;">
+                             style="width: 80px; height: 80px; background: #0f172a; border-radius: 0.75rem; border: 2px solid {{ $loop->first ? '#f97316' : 'rgba(255,255,255,0.1)' }}; overflow: hidden; cursor: pointer; flex-shrink: 0; transition: all 0.2s ease;">
                             <img src="{{ $img->url }}" alt="Foto referencial" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     @endforeach
@@ -75,7 +75,7 @@
 
         <!-- Right: Product Info & Buy/Redirect Actions -->
         <div style="display: flex; flex-direction: column;">
-            <div style="font-size: 0.85rem; font-weight: 700; color: #6366f1; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: #f97316; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
                 {{ $product->category->name ?? 'General' }}
             </div>
             
@@ -125,7 +125,7 @@
                         <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock > 0 ? $product->stock : 999 }}" style="width: 100%; padding: 0.85rem; background: #1e293b; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.75rem; color: #ffffff; font-size: 1rem; font-weight: 700; text-align: center;">
                     </div>
 
-                    <button type="submit" style="flex: 1; padding: 0.85rem 1.5rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4); transition: all 0.3s ease;">
+                    <button type="submit" style="flex: 1; padding: 0.85rem 1.5rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); transition: all 0.3s ease;">
                         <i data-feather="shopping-cart"></i> Añadir al Carrito
                     </button>
                 </form>
@@ -137,7 +137,7 @@
                     <i data-feather="shield" style="color: #10b981; width: 16px; height: 16px;"></i> Compra 100% Protegida
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-feather="truck" style="color: #6366f1; width: 16px; height: 16px;"></i> Envíos a todo el país
+                    <i data-feather="truck" style="color: #f97316; width: 16px; height: 16px;"></i> Envíos a todo el país
                 </div>
             </div>
         </div>
@@ -147,7 +147,7 @@
     @if($product->description)
         <div style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.08); padding: 2rem; border-radius: 1.25rem; margin-bottom: 4rem;">
             <h2 style="font-size: 1.35rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i data-feather="file-text" style="color: #6366f1;"></i> Descripción Detallada del Producto
+                <i data-feather="file-text" style="color: #f97316;"></i> Descripción Detallada del Producto
             </h2>
             <div style="color: #cbd5e1; line-height: 1.7; font-size: 0.95rem;">
                 {!! nl2br(e($product->description)) !!}
@@ -294,7 +294,7 @@
         if (thumbContainer) {
             const thumbs = thumbContainer.children;
             for (let i = 0; i < thumbs.length; i++) {
-                thumbs[i].style.borderColor = (i === currentImageIndex) ? '#6366f1' : 'rgba(255,255,255,0.1)';
+                thumbs[i].style.borderColor = (i === currentImageIndex) ? '#f97316' : 'rgba(255,255,255,0.1)';
             }
             if (thumbs[currentImageIndex]) {
                 thumbs[currentImageIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });

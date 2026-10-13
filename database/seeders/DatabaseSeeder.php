@@ -19,18 +19,18 @@ class DatabaseSeeder extends Seeder
     {
         // 0. Create Default Users (Admin & Customer)
         User::firstOrCreate(
-            ['email' => 'admin@elvatrago.com'],
+            ['email' => 'admin@globalclick.com'],
             [
-                'name' => 'Administrador Elvatrago',
+                'name' => 'Administrador GlobalClick',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ]
         );
 
         User::firstOrCreate(
-            ['email' => 'cliente@elvatrago.com'],
+            ['email' => 'cliente@globalclick.com'],
             [
-                'name' => 'Cliente Ejemplo',
+                'name' => 'Cliente GlobalClick',
                 'password' => Hash::make('password'),
                 'role' => 'user',
             ]

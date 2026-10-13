@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - Elvatrago</title>
+    <title>Iniciar Sesión - GlobalClick</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +22,8 @@
         <!-- Brand Header -->
         <div style="text-align: center; margin-bottom: 2rem;">
             <a href="{{ route('login') }}" class="logo-brand" style="display: inline-flex; justify-content: center; font-size: 2rem; margin-bottom: 0.5rem;">
-                <i data-feather="shopping-bag" style="width: 32px; height: 32px; color: #6366f1;"></i>
-                <span>ELVATRAGO</span>
+                <i data-feather="shopping-bag" style="width: 32px; height: 32px; color: #f97316;"></i>
+                <span>GlobalClick</span>
             </a>
             <p style="color: #94a3b8; font-size: 0.95rem;">Ingresa a tu cuenta para explorar el catálogo</p>
         </div>
@@ -71,12 +71,12 @@
 
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.75rem;">
                     <label style="display: flex; align-items: center; gap: 0.5rem; color: #94a3b8; font-size: 0.85rem; cursor: pointer;">
-                        <input type="checkbox" name="remember" style="accent-color: #6366f1; width: 16px; height: 16px;">
+                        <input type="checkbox" name="remember" style="accent-color: #f97316; width: 16px; height: 16px;">
                         Recordarme
                     </label>
                 </div>
 
-                <button type="submit" style="width: 100%; padding: 0.85rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4); transition: all 0.3s ease;">
+                <button type="submit" style="width: 100%; padding: 0.85rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); transition: all 0.3s ease;">
                     Iniciar Sesión
                 </button>
             </form>
@@ -84,7 +84,7 @@
             <!-- Footer Switch -->
             <div style="margin-top: 1.5rem; text-align: center;">
                 <p style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 0.75rem;">¿No tienes una cuenta aún?</p>
-                <a href="{{ route('register') }}" style="display: block; width: 100%; padding: 0.75rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; border-radius: 0.75rem; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease;">
+                <a href="{{ route('register') }}" style="display: block; width: 100%; padding: 0.75rem; background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; border-radius: 0.75rem; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s ease;">
                     ✨ Registrarse Gratis
                 </a>
             </div>
@@ -95,8 +95,8 @@
                     <i data-feather="key" style="width: 13px; height: 13px;"></i> Cuentas Demo Rápidas:
                 </div>
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                    <span>🛡️ Admin: admin@elvatrago.com</span>
-                    <span>🛍️ Cliente: cliente@elvatrago.com</span>
+                    <span>🛡️ Admin: admin@globalclick.com</span>
+                    <span>🛍️ Cliente: cliente@globalclick.com</span>
                 </div>
             </div>
         </div>

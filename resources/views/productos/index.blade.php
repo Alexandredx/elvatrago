@@ -9,7 +9,7 @@
         <p style="color: #94a3b8; font-size: 0.9rem;">Gestiona y publica tus productos manuales para venta directa en la tienda.</p>
     </div>
     
-    <a href="{{ route('admin.products.create') }}" class="pill-item active" style="padding: 0.75rem 1.35rem; font-size: 0.9rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);">
+    <a href="{{ route('admin.products.create') }}" class="pill-item active" style="padding: 0.75rem 1.35rem; font-size: 0.9rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);">
         <i data-feather="plus" style="width: 16px; height: 16px;"></i> + Agregar Producto
     </a>
 </div>
@@ -38,7 +38,7 @@
             <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Borrador</option>
         </select>
 
-        <button type="submit" style="background: #4f46e5; border: none; color: white; padding: 0.55rem 1rem; border-radius: 0.65rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+        <button type="submit" style="background: #f97316; border: none; color: white; padding: 0.55rem 1rem; border-radius: 0.65rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
             Filtrar
         </button>
 
@@ -124,7 +124,7 @@
                                     <i data-feather="external-link" style="width: 14px; height: 14px;"></i>
                                 </a>
 
-                                <a href="{{ route('admin.products.edit', $product->id) }}" title="Editar" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; padding: 0.4rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <a href="{{ route('admin.products.edit', $product->id) }}" title="Editar" style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 0.4rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.35rem;">
                                     <i data-feather="edit-2" style="width: 14px; height: 14px;"></i> Editar
                                 </a>
 

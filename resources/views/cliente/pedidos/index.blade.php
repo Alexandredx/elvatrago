@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mis Pedidos - Elvatrago')
+@section('title', 'Mis Pedidos - GlobalClick')
 
 @section('content')
 <div class="main-container" style="padding-top: 2.5rem; padding-bottom: 5rem;">
@@ -8,7 +8,7 @@
     <div style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem;">
         <div>
             <h1 style="font-size: 2.25rem; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.75rem;">
-                <i data-feather="package" style="color: #818cf8; width: 32px; height: 32px;"></i>
+                <i data-feather="package" style="color: #fb923c; width: 32px; height: 32px;"></i>
                 Mis Pedidos
             </h1>
             <p style="color: #94a3b8; font-size: 1rem; margin-top: 0.35rem;">
@@ -26,7 +26,7 @@
     <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1rem;">
         <a href="{{ route('client.orders.index', ['filter' => 'all']) }}" 
            style="padding: 0.6rem 1.25rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 700; text-decoration: none; transition: all 0.2s;
-                  background: {{ $filter === 'all' ? 'linear-gradient(135deg, #6366f1, #4f46e5)' : 'rgba(30, 41, 59, 0.6)' }};
+                  background: {{ $filter === 'all' ? 'linear-gradient(135deg, #f97316, #ea580c)' : 'rgba(30, 41, 59, 0.6)' }};
                   border: 1px solid {{ $filter === 'all' ? 'transparent' : 'rgba(255, 255, 255, 0.08)' }};
                   color: {{ $filter === 'all' ? '#ffffff' : '#94a3b8' }};">
             Todos ({{ $counts['all'] }})
@@ -70,7 +70,7 @@
                         <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
                             <div>
                                 <span style="font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Nº Pedido</span>
-                                <div style="font-size: 1.1rem; font-weight: 800; color: #818cf8;">{{ $order->order_number }}</div>
+                                <div style="font-size: 1.1rem; font-weight: 800; color: #fb923c;">{{ $order->order_number }}</div>
                             </div>
 
                             <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 1.5rem;">
@@ -146,7 +146,7 @@
                         <!-- Barra de acciones del pedido -->
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
                             <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem;">
-                                <i data-feather="map-pin" style="width: 14px; height: 14px; color: #818cf8;"></i>
+                                <i data-feather="map-pin" style="width: 14px; height: 14px; color: #fb923c;"></i>
                                 <span>Envío a: <strong style="color: #cbd5e1;">{{ Str::limit($order->shipping_address, 45) }}</strong></span>
                             </div>
 
@@ -187,7 +187,7 @@
     @else
         <!-- Estado Vacío -->
         <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.5rem; padding: 4.5rem 2rem; text-align: center; color: #94a3b8;">
-            <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3);">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: rgba(249, 115, 22, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3);">
                 <i data-feather="inbox" style="width: 36px; height: 36px;"></i>
             </div>
             

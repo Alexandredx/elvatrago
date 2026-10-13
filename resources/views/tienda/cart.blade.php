@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Carrito de Compras - Elvatrago')
+@section('title', 'Carrito de Compras - GlobalClick')
 
 @section('content')
 <div style="max-width: 1100px; margin: 3rem auto 4rem; padding: 0 1.5rem;">
     <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-        <i data-feather="shopping-cart" style="color: #6366f1;"></i> Carrito de Compras Directas
+        <i data-feather="shopping-cart" style="color: #f97316;"></i> Carrito de Compras Directas
     </h1>
 
     @if(count($cart) > 0)
@@ -43,7 +43,7 @@
                                     <form action="{{ route('cart.update', $id) }}" method="POST" style="display: flex; align-items: center; gap: 0.5rem;">
                                         @csrf
                                         <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="{{ $item['stock'] }}" style="width: 65px; padding: 0.4rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.5rem; color: #ffffff; font-weight: 700; text-align: center;">
-                                        <button type="submit" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; padding: 0.4rem 0.6rem; border-radius: 0.5rem; cursor: pointer;">
+                                        <button type="submit" style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 0.4rem 0.6rem; border-radius: 0.5rem; cursor: pointer;">
                                             <i data-feather="refresh-cw" style="width: 14px; height: 14px;"></i>
                                         </button>
                                     </form>
@@ -72,7 +72,7 @@
                             <i data-feather="trash" style="width: 14px; height: 14px;"></i> Vaciar Carrito
                         </button>
                     </form>
-                    <a href="{{ route('shop.index') }}" style="font-size: 0.85rem; color: #6366f1; font-weight: 600;">&larr; Continuar comprando</a>
+                    <a href="{{ route('shop.index') }}" style="font-size: 0.85rem; color: #f97316; font-weight: 600;">&larr; Continuar comprando</a>
                 </div>
             </div>
 
@@ -97,7 +97,7 @@
                     <span>@money($subtotal)</span>
                 </div>
 
-                <a href="{{ route('checkout.index') }}" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.9rem; background: var(--accent-gradient); border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);">
+                <a href="{{ route('checkout.index') }}" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.9rem; background: var(--accent-gradient); border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);">
                     Proceder al Checkout &rarr;
                 </a>
             </div>

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Solicitud de Devolución - Elvatrago')
+@section('title', 'Solicitud de Devolución - GlobalClick')
 
 @section('content')
 <div class="main-container" style="padding-top: 3rem; padding-bottom: 5rem;">
     <div style="max-width: 680px; margin: 0 auto;">
         
         <div style="text-align: center; margin-bottom: 2.5rem;">
-            <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3);">
+            <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(249, 115, 22, 0.15); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3);">
                 <i data-feather="rotate-ccw" style="width: 28px; height: 28px;"></i>
             </div>
             <h1 style="font-size: 2.25rem; font-weight: 800; color: #ffffff; letter-spacing: -0.02em;">Solicitud de Devolución</h1>
@@ -98,7 +98,7 @@
                               style="width: 100%; padding: 0.85rem 1rem; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; line-height: 1.5; resize: vertical;">{{ old('details') }}</textarea>
                 </div>
 
-                <button type="submit" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 700; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.5);">
+                <button type="submit" style="width: 100%; padding: 1rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 700; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.5);">
                     <i data-feather="send" style="width: 18px; height: 18px;"></i>
                     Enviar Solicitud de Devolución
                 </button>

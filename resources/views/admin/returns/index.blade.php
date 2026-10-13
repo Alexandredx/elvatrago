@@ -6,7 +6,7 @@
 <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
     <div>
         <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
-            <i data-feather="rotate-ccw" style="color: #818cf8;"></i>
+            <i data-feather="rotate-ccw" style="color: #fb923c;"></i>
             Solicitudes de Devolución
         </h1>
         <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem;">
@@ -21,8 +21,8 @@
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
         <a href="{{ route('admin.returns.index', ['status' => 'all', 'search' => $search]) }}" 
            style="padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.825rem; font-weight: 700; text-decoration: none; transition: all 0.2s;
-                  background: {{ $status === 'all' ? 'rgba(99, 102, 241, 0.25)' : 'rgba(30, 41, 59, 0.6)' }};
-                  border: 1px solid {{ $status === 'all' ? 'rgba(99, 102, 241, 0.5)' : 'rgba(255, 255, 255, 0.08)' }};
+                  background: {{ $status === 'all' ? 'rgba(249, 115, 22, 0.25)' : 'rgba(30, 41, 59, 0.6)' }};
+                  border: 1px solid {{ $status === 'all' ? 'rgba(249, 115, 22, 0.5)' : 'rgba(255, 255, 255, 0.08)' }};
                   color: {{ $status === 'all' ? '#ffffff' : '#94a3b8' }};">
             Todos ({{ $counts['all'] }})
         </a>
@@ -64,7 +64,7 @@
                    style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; padding: 0.55rem 1rem 0.55rem 2.25rem; border-radius: 0.75rem; font-size: 0.85rem; width: 280px;">
             <i data-feather="search" style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: #64748b;"></i>
         </div>
-        <button type="submit" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; padding: 0.55rem 0.9rem; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+        <button type="submit" style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 0.55rem 0.9rem; border-radius: 0.75rem; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
             Filtrar
         </button>
         @if($search)
@@ -94,7 +94,7 @@
             <tbody>
                 @foreach($returns as $ret)
                     <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s;">
-                        <td style="padding: 1rem 1.25rem; font-weight: 800; color: #818cf8;">
+                        <td style="padding: 1rem 1.25rem; font-weight: 800; color: #fb923c;">
                             {{ $ret->return_number }}
                         </td>
                         <td style="padding: 1rem 1.25rem;">
@@ -146,7 +146,7 @@
                         </td>
                         <td style="padding: 1rem 1.25rem; text-align: center;">
                             <a href="{{ route('admin.returns.show', $ret->id) }}" 
-                               style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; padding: 0.4rem 0.85rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                               style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 0.4rem 0.85rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
                                 <i data-feather="edit-2" style="width: 13px; height: 13px;"></i> Gestionar
                             </a>
                         </td>
@@ -160,7 +160,7 @@
         </div>
     @else
         <div style="padding: 4rem 2rem; text-align: center; color: #94a3b8;">
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: #818cf8;">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(249, 115, 22, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: #fb923c;">
                 <i data-feather="rotate-ccw" style="width: 32px; height: 32px;"></i>
             </div>
             <h3 style="font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 0.5rem;">No hay solicitudes de devolución</h3>

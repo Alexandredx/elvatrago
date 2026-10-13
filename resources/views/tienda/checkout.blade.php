@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Finalizar Compra - Elvatrago')
+@section('title', 'Finalizar Compra - GlobalClick')
 
 @section('content')
 <div style="max-width: 1100px; margin: 3rem auto 4rem; padding: 0 1.5rem;">
     <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-        <i data-feather="credit-card" style="color: #6366f1;"></i> Checkout & Detalles de Envío
+        <i data-feather="credit-card" style="color: #f97316;"></i> Checkout & Detalles de Envío
     </h1>
 
     <div style="display: grid; grid-template-columns: 1fr 360px; gap: 2.5rem; align-items: start;">

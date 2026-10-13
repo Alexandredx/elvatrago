@@ -30,7 +30,7 @@
                             {{ $cat->slug }}
                         </td>
                         <td style="padding: 1rem 1.25rem;">
-                            <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 0.25rem 0.65rem; border-radius: 9999px; font-weight: 700; font-size: 0.8rem;">
+                            <span style="background: rgba(249, 115, 22, 0.2); color: #fdba74; padding: 0.25rem 0.65rem; border-radius: 9999px; font-weight: 700; font-size: 0.8rem;">
                                 {{ $cat->products_count }} productos
                             </span>
                         </td>

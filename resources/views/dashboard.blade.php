@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Admin - Elvatrago')
+@section('title', 'Dashboard Admin - GlobalClick')
 
 @section('content')
 <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -20,7 +20,7 @@
 <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
     <div class="stat-card">
         <div class="stat-label">Total Productos</div>
-        <div class="stat-value" style="color: #6366f1;">{{ $totalProducts }}</div>
+        <div class="stat-value" style="color: #f97316;">{{ $totalProducts }}</div>
         <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">En inventario local</div>
     </div>
     
@@ -38,7 +38,7 @@
 
     <div class="stat-card">
         <div class="stat-label">Total Pedidos</div>
-        <div class="stat-value" style="color: #a855f7;">{{ $totalOrders }}</div>
+        <div class="stat-value" style="color: #ea580c;">{{ $totalOrders }}</div>
         <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Órdenes procesadas</div>
     </div>
 
@@ -55,7 +55,7 @@
                 <span style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 0.65rem; padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800;">PENDIENTE</span>
             @endif
         </div>
-        <div class="stat-value" style="color: {{ $pendingReturns > 0 ? '#fbbf24' : '#818cf8' }};">{{ $pendingReturns }}</div>
+        <div class="stat-value" style="color: {{ $pendingReturns > 0 ? '#fbbf24' : '#fb923c' }};">{{ $pendingReturns }}</div>
         <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Solicitudes pendientes &rarr;</div>
     </a>
 </div>
@@ -70,7 +70,7 @@
             <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
                 <i data-feather="shopping-cart" style="color: #34d399;"></i> Últimos Pedidos Recibidos
             </h3>
-            <a href="{{ route('admin.orders.index') }}" style="font-size: 0.8rem; color: #6366f1; font-weight: 600;">Ver todos &rarr;</a>
+            <a href="{{ route('admin.orders.index') }}" style="font-size: 0.8rem; color: #f97316; font-weight: 600;">Ver todos &rarr;</a>
         </div>
 
         @if($recentOrders->count() > 0)
@@ -100,9 +100,9 @@
     <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
             <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
-                <i data-feather="package" style="color: #6366f1;"></i> Productos en Catálogo
+                <i data-feather="package" style="color: #f97316;"></i> Productos en Catálogo
             </h3>
-            <a href="{{ route('admin.products.index') }}" style="font-size: 0.8rem; color: #6366f1; font-weight: 600;">Ver todos &rarr;</a>
+            <a href="{{ route('admin.products.index') }}" style="font-size: 0.8rem; color: #f97316; font-weight: 600;">Ver todos &rarr;</a>
         </div>
 
         @if($latestProducts->count() > 0)

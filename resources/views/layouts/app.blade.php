@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Elvatrago - Tienda E-Commerce & Afiliados')</title>
+    <title>@yield('title', 'GlobalClick - Tienda E-Commerce & Afiliados')</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
     <script>
         (function() {
             try {
-                var savedTheme = localStorage.getItem('elvatrago_theme') || 'dark';
+                var savedTheme = localStorage.getItem('globalclick_theme') || localStorage.getItem('elvatrago_theme') || 'dark';
                 if (savedTheme === 'light') {
                     document.documentElement.setAttribute('data-theme', 'light');
                 }
@@ -35,7 +35,7 @@
         <div class="nav-container">
             <a href="{{ route('shop.index') }}" class="logo-brand">
                 <i data-feather="shopping-bag"></i>
-                <span>ELVATRAGO</span>
+                <span>GlobalClick</span>
             </a>
 
             <!-- Search Bar -->
@@ -70,8 +70,8 @@
                 </a>
 
                 <!-- Opción Pedidos (Historial y compras del cliente) -->
-                <a href="{{ route('client.orders.index') }}" class="nav-btn" style="background: {{ request()->routeIs('client.orders.*') ? 'rgba(99, 102, 241, 0.25)' : 'rgba(30, 41, 59, 0.8)' }}; border: 1px solid {{ request()->routeIs('client.orders.*') ? 'rgba(99, 102, 241, 0.5)' : 'rgba(255, 255, 255, 0.12)' }}; color: {{ request()->routeIs('client.orders.*') ? '#ffffff' : '#f1f5f9' }}; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.95rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease;">
-                    <i data-feather="package" style="width: 16px; height: 16px; color: #818cf8;"></i>
+                <a href="{{ route('client.orders.index') }}" class="nav-btn" style="background: {{ request()->routeIs('client.orders.*') ? 'rgba(249, 115, 22, 0.25)' : 'rgba(30, 41, 59, 0.8)' }}; border: 1px solid {{ request()->routeIs('client.orders.*') ? 'rgba(249, 115, 22, 0.5)' : 'rgba(255, 255, 255, 0.12)' }}; color: {{ request()->routeIs('client.orders.*') ? '#ffffff' : '#f1f5f9' }}; display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.95rem; border-radius: 9999px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s ease;">
+                    <i data-feather="package" style="width: 16px; height: 16px; color: #fb923c;"></i>
                     <span>Pedidos</span>
                     @auth
                         @php
@@ -81,7 +81,7 @@
                             })->count();
                         @endphp
                         @if($userOrdersCount > 0)
-                            <span style="background: #6366f1; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; border-radius: 9999px; min-width: 18px; text-align: center;">
+                            <span style="background: #f97316; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; border-radius: 9999px; min-width: 18px; text-align: center;">
                                 {{ $userOrdersCount }}
                             </span>
                         @endif
@@ -91,15 +91,15 @@
                 <!-- Sección de Usuario y Configuración (Tuerquita al lado del usuario) -->
                 <div style="display: flex; align-items: center; gap: 0.65rem; margin-left: 0.5rem; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 0.75rem;">
                     @auth
-                        <span style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.35rem;" title="Rol: {{ Auth::user()->isAdmin() ? 'Administrador' : 'Cliente' }}">
-                            <i data-feather="{{ Auth::user()->isAdmin() ? 'shield' : 'user' }}" style="width: 14px; height: 14px; color: {{ Auth::user()->isAdmin() ? '#fb923c' : '#a5b4fc' }};"></i> 
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #fdba74; display: flex; align-items: center; gap: 0.35rem;" title="Rol: {{ Auth::user()->isAdmin() ? 'Administrador' : 'Cliente' }}">
+                            <i data-feather="{{ Auth::user()->isAdmin() ? 'shield' : 'user' }}" style="width: 14px; height: 14px; color: {{ Auth::user()->isAdmin() ? '#fb923c' : '#fdba74' }};"></i> 
                             {{ Auth::user()->name }}
                         </span>
                     @else
                         <a href="{{ route('login') }}" class="nav-btn btn-admin" style="font-size: 0.8rem; padding: 0.45rem 0.85rem;">
                             <i data-feather="log-in" style="width: 14px; height: 14px;"></i> Ingresar
                         </a>
-                        <a href="{{ route('register') }}" class="nav-btn" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; font-size: 0.8rem; padding: 0.45rem 0.85rem;">
+                        <a href="{{ route('register') }}" class="nav-btn" style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; font-size: 0.8rem; padding: 0.45rem 0.85rem;">
                             <i data-feather="user-plus" style="width: 14px; height: 14px;"></i> Registro
                         </a>
                     @endauth
@@ -118,7 +118,7 @@
                         <!-- Menú flotante con las opciones de Configuración -->
                         <div id="settingsDropdownMenu" class="settings-dropdown-popover" style="display: none;">
                             <div class="settings-dropdown-popover-header">
-                                <i data-feather="settings" style="width: 13px; height: 13px; color: #818cf8;"></i>
+                                <i data-feather="settings" style="width: 13px; height: 13px; color: #fb923c;"></i>
                                 <span>Configuración</span>
                             </div>
                             <div class="settings-dropdown-popover-content">
@@ -200,13 +200,13 @@
     <footer>
         <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
             <div>
-                <span style="font-weight: 700; color: #f8fafc;">Elvatrago E-Commerce</span> &copy; {{ date('Y') }} — Todos los derechos reservados.
+                <span style="font-weight: 700; color: #f8fafc;">GlobalClick E-Commerce</span> &copy; {{ date('Y') }} — Todos los derechos reservados.
             </div>
             <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
                 <a href="{{ route('shop.index') }}" style="color: #cbd5e1;">Catálogo</a>
                 <a href="{{ route('cart.index') }}" style="color: #34d399;">Carrito</a>
-                <a href="{{ route('returns.public.create') }}" style="color: #818cf8; text-decoration: none;">Solicitud de Devolución</a>
-                <a href="{{ route('admin.dashboard') }}" style="color: #a855f7;">Administración</a>
+                <a href="{{ route('returns.public.create') }}" style="color: #fb923c; text-decoration: none;">Solicitud de Devolución</a>
+                <a href="{{ route('admin.dashboard') }}" style="color: #f97316;">Administración</a>
             </div>
         </div>
     </footer>
@@ -242,10 +242,10 @@
             
             if (newTheme === 'light') {
                 document.documentElement.setAttribute('data-theme', 'light');
-                try { localStorage.setItem('elvatrago_theme', 'light'); } catch(e) {}
+                try { localStorage.setItem('globalclick_theme', 'light'); } catch(e) {}
             } else {
                 document.documentElement.removeAttribute('data-theme');
-                try { localStorage.setItem('elvatrago_theme', 'dark'); } catch(e) {}
+                try { localStorage.setItem('globalclick_theme', 'dark'); } catch(e) {}
             }
             
             updateThemeUI(newTheme);

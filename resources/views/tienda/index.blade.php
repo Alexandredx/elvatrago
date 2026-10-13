@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Elvatrago - Catálogo E-Commerce & Afiliados')
+@section('title', 'GlobalClick - Catálogo E-Commerce & Afiliados')
 
 @section('content')
 <!-- Hero Section -->
 <div class="hero-section">
-    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 0.35rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.25rem;">
+    <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(249, 115, 22, 0.15); border: 1px solid rgba(249, 115, 22, 0.3); color: #fdba74; padding: 0.35rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.25rem;">
         <i data-feather="zap" style="width: 16px; height: 16px;"></i>
-        <span>Catálogo Exclusivo Elvatrago</span>
+        <span>Catálogo Exclusivo GlobalClick</span>
     </div>
-    <h1 class="hero-title">Encuentra los Mejores Productos & Novedades</h1>
+    <h1 class="hero-title">Encuentra todos los productos que necesites</h1>
     <p class="hero-subtitle">
-        Descubre nuestra selección de tecnología, sonido, accesorios y Smart Living con los mejores precios del mercado.
+        Descubre nuestra selección de tecnología, sonido, accesorios y Smart Living.
     </p>
 </div>
 
@@ -20,12 +20,12 @@
     <div class="pill-group">
         <span style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-right: 0.5rem;">Categorías:</span>
         <a href="{{ route('shop.index', array_merge(request()->except('category', 'page'))) }}" 
-           style="font-size: 0.825rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ !request('category') ? '#4f46e5' : 'rgba(255,255,255,0.05)' }}; color: #ffffff;">
+        style="font-size: 0.825rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ !request('category') ? '#f97316' : 'rgba(255,255,255,0.05)' }}; color: #ffffff;">
             Todas
         </a>
         @foreach($categories as $cat)
             <a href="{{ route('shop.index', array_merge(request()->except('page'), ['category' => $cat->slug])) }}" 
-               style="font-size: 0.825rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ request('category') == $cat->slug ? '#4f46e5' : 'rgba(255,255,255,0.05)' }}; color: #ffffff; border: 1px solid rgba(255,255,255,0.08);">
+            style="font-size: 0.825rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ request('category') == $cat->slug ? '#f97316' : 'rgba(255,255,255,0.05)' }}; color: #ffffff; border: 1px solid rgba(255,255,255,0.08);">
                 {{ $cat->name }} ({{ $cat->products_count }})
             </a>
         @endforeach

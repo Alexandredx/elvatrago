@@ -68,7 +68,7 @@
                 <!-- CARD 2: Existing & New Images (Shopify-style) -->
                 <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.75rem;">
                     <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i data-feather="image" style="color: #6366f1; width: 18px; height: 18px;"></i> Galería Multimedia
+                        <i data-feather="image" style="color: #f97316; width: 18px; height: 18px;"></i> Galería Multimedia
                     </h3>
 
                     <!-- Existing Images -->
@@ -82,7 +82,7 @@
                                     <div style="position: relative; width: 95px; height: 95px; border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); background: #0f172a;">
                                         <img src="{{ $img->url }}" style="width: 100%; height: 100%; object-fit: cover;">
                                         @if($img->is_primary)
-                                            <span style="position: absolute; bottom: 0.25rem; left: 0.25rem; background: #4f46e5; color: #ffffff; font-size: 0.65rem; padding: 0.1rem 0.35rem; border-radius: 0.25rem; font-weight: 700;">
+                                            <span style="position: absolute; bottom: 0.25rem; left: 0.25rem; background: #f97316; color: #ffffff; font-size: 0.65rem; padding: 0.1rem 0.35rem; border-radius: 0.25rem; font-weight: 700;">
                                                 Principal
                                             </span>
                                         @endif
@@ -96,8 +96,8 @@
                     @endif
 
                     <!-- Upload More Dropzone -->
-                    <div id="dropzoneEdit" onclick="document.getElementById('editImageFileInput').click()" style="border: 2px dashed rgba(99, 102, 241, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 1.75rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;">
-                        <i data-feather="upload-cloud" style="width: 32px; height: 32px; color: #6366f1; margin-bottom: 0.5rem;"></i>
+                    <div id="dropzoneEdit" onclick="document.getElementById('editImageFileInput').click()" style="border: 2px dashed rgba(249, 115, 22, 0.4); background: rgba(15, 23, 42, 0.6); border-radius: 1rem; padding: 1.75rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s ease;">
+                        <i data-feather="upload-cloud" style="width: 32px; height: 32px; color: #f97316; margin-bottom: 0.5rem;"></i>
                         <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem;">Subir nuevas fotos para este producto</div>
                         <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.2rem;">JPG, PNG, WEBP, GIF, JFIF, AVIF (Hasta 20MB)</div>
                         <input type="file" id="editImageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewEditFiles(this)" onclick="event.stopPropagation()">
@@ -194,7 +194,7 @@
 
                     <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06);">
                         <label style="display: flex; align-items: center; gap: 0.65rem; color: #ffffff; font-size: 0.875rem; font-weight: 600; cursor: pointer;">
-                            <input type="checkbox" name="is_featured" value="1" {{ $product->is_featured ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #6366f1;">
+                            <input type="checkbox" name="is_featured" value="1" {{ $product->is_featured ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #f97316;">
                             <span>⭐ Destacar en portada</span>
                         </label>
                         <p style="color: #94a3b8; font-size: 0.78rem; margin: 0.35rem 0 0 1.8rem;">Muestra este producto en el escaparate destacado.</p>
@@ -203,7 +203,7 @@
 
                 <!-- Action Buttons Box -->
                 <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <button type="submit" class="pill-item active" style="width: 100%; padding: 0.95rem; font-size: 1rem; font-weight: 800; border: none; cursor: pointer; text-align: center; justify-content: center; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+                    <button type="submit" class="pill-item active" style="width: 100%; padding: 0.95rem; font-size: 1rem; font-weight: 800; border: none; cursor: pointer; text-align: center; justify-content: center; box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);">
                         Guardar Cambios
                     </button>
                     
@@ -237,7 +237,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const card = document.createElement('div');
-                    card.style.cssText = 'position: relative; width: 75px; height: 75px; border-radius: 0.65rem; overflow: hidden; border: 1px solid rgba(99,102,241,0.5); background: #0f172a;';
+                    card.style.cssText = 'position: relative; width: 75px; height: 75px; border-radius: 0.65rem; overflow: hidden; border: 1px solid rgba(249,115,22,0.5); background: #0f172a;';
                     card.innerHTML = `
                         <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
                         <span style="position: absolute; bottom: 0.15rem; left: 0.15rem; background: rgba(16,185,129,0.85); color: #fff; font-size: 0.6rem; padding: 0.05rem 0.3rem; border-radius: 0.2rem; font-weight: 700;">
@@ -259,8 +259,8 @@
             dropzoneEdit.addEventListener(eventName, (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                dropzoneEdit.style.borderColor = '#6366f1';
-                dropzoneEdit.style.background = 'rgba(99, 102, 241, 0.15)';
+                dropzoneEdit.style.borderColor = '#f97316';
+                dropzoneEdit.style.background = 'rgba(249, 115, 22, 0.15)';
             }, false);
         });
 
@@ -268,7 +268,7 @@
             dropzoneEdit.addEventListener(eventName, (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                dropzoneEdit.style.borderColor = 'rgba(99, 102, 241, 0.4)';
+                dropzoneEdit.style.borderColor = 'rgba(249, 115, 22, 0.4)';
                 dropzoneEdit.style.background = 'rgba(15, 23, 42, 0.6)';
             }, false);
         });

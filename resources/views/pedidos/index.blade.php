@@ -23,7 +23,7 @@
         <tbody>
             @foreach($orders as $order)
                 <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
-                    <td style="padding: 1rem 1.25rem; font-weight: 800; color: #6366f1;">
+                    <td style="padding: 1rem 1.25rem; font-weight: 800; color: #f97316;">
                         {{ $order->order_number }}
                     </td>
                     <td style="padding: 1rem 1.25rem;">
@@ -42,7 +42,7 @@
                         {{ $order->created_at->format('d/m/Y H:i') }}
                     </td>
                     <td style="padding: 1rem 1.25rem; text-align: center;">
-                        <a href="{{ route('admin.orders.show', $order->id) }}" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #a5b4fc; padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600;">
+                        <a href="{{ route('admin.orders.show', $order->id) }}" style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; padding: 0.35rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 600;">
                             Ver Detalle
                         </a>
                     </td>

@@ -6,12 +6,12 @@
 <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
     <div>
         <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 0.75rem;">
-            <i data-feather="download-cloud" style="color: #6366f1; width: 32px; height: 32px;"></i>
+            <i data-feather="download-cloud" style="color: #f97316; width: 32px; height: 32px;"></i>
             Buscador & Importador de Catálogo (AliExpress & Temu)
         </h1>
         <p style="color: #94a3b8; font-size: 0.95rem; margin-top: 0.35rem;">
             Explora las tendencias mundiales e importa productos verificados directamente a tu catálogo público con un solo clic.
-            <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.4); padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; margin-left: 0.5rem;">
+            <span style="background: rgba(249, 115, 22, 0.2); color: #fdba74; border: 1px solid rgba(249, 115, 22, 0.4); padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 700; margin-left: 0.5rem;">
                 {{ count($externalCatalog) }} Productos Disponibles
             </span>
         </p>
@@ -23,9 +23,9 @@
 </div>
 
 <!-- Custom Direct URL Import Box -->
-<div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15)); border: 1px solid rgba(99, 102, 241, 0.35); padding: 1.5rem; border-radius: 1.25rem; margin-bottom: 2rem;">
+<div style="background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(245, 158, 11, 0.15)); border: 1px solid rgba(249, 115, 22, 0.35); padding: 1.5rem; border-radius: 1.25rem; margin-bottom: 2rem;">
     <h2 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-        <i data-feather="link-2" style="color: #a5b4fc;"></i> 🔗 Importar Cualquier Producto por Enlace Directo (AliExpress o Temu)
+        <i data-feather="link-2" style="color: #fdba74;"></i> 🔗 Importar Cualquier Producto por Enlace Directo (AliExpress o Temu)
     </h2>
     <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1.25rem;">
         ¿Tienes el enlace de un producto específico de AliExpress o Temu? Pega la URL aquí para agregarlo instantáneamente a tu catálogo público de la tienda:
@@ -53,7 +53,7 @@
         </div>
 
         <div>
-            <button type="submit" style="width: 100%; padding: 0.65rem; background: var(--accent-gradient); border: none; border-radius: 0.6rem; color: #ffffff; font-weight: 800; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.35rem; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);">
+            <button type="submit" style="width: 100%; padding: 0.65rem; background: var(--accent-gradient); border: none; border-radius: 0.6rem; color: #ffffff; font-weight: 800; font-size: 0.875rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.35rem; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);">
                 <i data-feather="plus-circle" style="width: 16px; height: 16px;"></i> Importar URL
             </button>
         </div>
@@ -89,7 +89,7 @@
             @if(request('platform')) <input type="hidden" name="platform" value="{{ request('platform') }}"> @endif
             @if(request('category')) <input type="hidden" name="category" value="{{ request('category') }}"> @endif
             <input type="text" name="search" placeholder="Buscar en catálogo externo..." value="{{ request('search') }}" style="width: 100%; padding: 0.55rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.75rem; color: #ffffff; font-size: 0.875rem;">
-            <button type="submit" style="background: #6366f1; border: none; color: white; padding: 0.55rem 1rem; border-radius: 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.875rem;">Buscar</button>
+            <button type="submit" style="background: #f97316; border: none; color: white; padding: 0.55rem 1rem; border-radius: 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.875rem;">Buscar</button>
         </form>
     </div>
 
@@ -97,12 +97,12 @@
     <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.85rem;">
         <span style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; margin-right: 0.5rem;">Categoría:</span>
         <a href="{{ route('admin.import.index', array_merge(request()->except('category', 'page'), ['category' => 'all'])) }}" 
-           style="font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ request('category', 'all') == 'all' ? '#4f46e5' : 'rgba(255,255,255,0.05)' }}; color: #ffffff;">
+           style="font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ request('category', 'all') == 'all' ? '#f97316' : 'rgba(255,255,255,0.05)' }}; color: #ffffff;">
             Todas
         </a>
         @foreach($categories as $cat)
             <a href="{{ route('admin.import.index', array_merge(request()->except('category', 'page'), ['category' => $cat->slug])) }}" 
-               style="font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ request('category') == $cat->slug ? '#4f46e5' : 'rgba(255,255,255,0.05)' }}; color: #ffffff; border: 1px solid rgba(255,255,255,0.08);">
+               style="font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 9999px; background: {{ request('category') == $cat->slug ? '#f97316' : 'rgba(255,255,255,0.05)' }}; color: #ffffff; border: 1px solid rgba(255,255,255,0.08);">
                 {{ $cat->name }}
             </a>
         @endforeach
@@ -141,7 +141,7 @@
 
                 <!-- Body Info -->
                 <div style="padding: 1.25rem; display: flex; flex-direction: column; flex: 1;">
-                    <div style="font-size: 0.75rem; font-weight: 700; color: #a5b4fc; text-transform: uppercase; margin-bottom: 0.35rem;">
+                    <div style="font-size: 0.75rem; font-weight: 700; color: #fdba74; text-transform: uppercase; margin-bottom: 0.35rem;">
                         {{ str_replace('-', ' ', Str::title($item['category_slug'])) }}
                     </div>
 
@@ -189,7 +189,7 @@
                                 <input type="hidden" name="short_description" value="{{ $item['short_description'] }}">
                                 <input type="hidden" name="description" value="{{ $item['description'] }}">
 
-                                <button type="submit" style="width: 100%; padding: 0.75rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35); transition: all 0.25s ease;">
+                                <button type="submit" style="width: 100%; padding: 0.75rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35); transition: all 0.25s ease;">
                                     <i data-feather="zap" style="width: 16px; height: 16px;"></i> ⚡ Importar a mi Catálogo
                                 </button>
                             </form>

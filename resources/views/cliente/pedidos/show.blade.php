@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Comprobante de Pedido ' . $order->order_number . ' - Elvatrago')
+@section('title', 'Comprobante de Pedido ' . $order->order_number . ' - GlobalClick')
 
 @section('content')
 <div class="main-container" style="padding-top: 2.5rem; padding-bottom: 5rem; max-width: 960px; margin: 0 auto;">
@@ -18,7 +18,7 @@
             <div>
                 <span style="font-size: 0.8rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; letter-spacing: 0.05em;">Comprobante de Compra</span>
                 <h1 style="font-size: 2rem; font-weight: 800; color: #ffffff; margin-top: 0.25rem;">
-                    Pedido: <span style="color: #818cf8;">{{ $order->order_number }}</span>
+                    Pedido: <span style="color: #fb923c;">{{ $order->order_number }}</span>
                 </h1>
                 <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.35rem;">
                     Realizado el {{ $order->created_at->format('d/m/Y \a \l\a\s H:i') }}
@@ -108,7 +108,7 @@
         <!-- Artículos Comprados -->
         <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.75rem;">
             <h2 style="font-size: 1.2rem; font-weight: 700; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i data-feather="shopping-bag" style="color: #6366f1; width: 20px; height: 20px;"></i>
+                <i data-feather="shopping-bag" style="color: #f97316; width: 20px; height: 20px;"></i>
                 Artículos Comprados ({{ $order->items->count() }})
             </h2>
 
@@ -169,7 +169,7 @@
             <!-- Datos de Entrega -->
             <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.5rem;">
                 <h3 style="font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i data-feather="map-pin" style="color: #818cf8; width: 18px; height: 18px;"></i>
+                    <i data-feather="map-pin" style="color: #fb923c; width: 18px; height: 18px;"></i>
                     Dirección de Entrega
                 </h3>
 
@@ -204,7 +204,7 @@
                             Motivo: {{ $returnReq->reason }}
                         </div>
                         @if($returnReq->admin_notes)
-                            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.08); color: #a5b4fc;">
+                            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.08); color: #fdba74;">
                                 <strong>Nota del soporte:</strong> {{ $returnReq->admin_notes }}
                             </div>
                         @endif

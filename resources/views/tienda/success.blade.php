@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pedido Confirmado - Elvatrago')
+@section('title', 'Pedido Confirmado - GlobalClick')
 
 @section('content')
 <div style="max-width: 700px; margin: 4rem auto; padding: 0 1.5rem; text-align: center;">
@@ -18,7 +18,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 1.25rem;">
             <div>
                 <span style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase;">Número de Orden</span>
-                <div style="font-size: 1.25rem; font-weight: 800; color: #6366f1;">{{ $order->order_number }}</div>
+                <div style="font-size: 1.25rem; font-weight: 800; color: #f97316;">{{ $order->order_number }}</div>
             </div>
             <span class="badge badge-direct" style="padding: 0.35rem 0.85rem;">ESTADO: {{ strtoupper($order->status) }}</span>
         </div>

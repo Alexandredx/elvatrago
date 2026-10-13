@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta de Cliente - Elvatrago</title>
+    <title>Crear Cuenta de Cliente - GlobalClick</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,8 +22,8 @@
         <!-- Brand Header -->
         <div style="text-align: center; margin-bottom: 2rem;">
             <a href="{{ route('login') }}" class="logo-brand" style="display: inline-flex; justify-content: center; font-size: 2rem; margin-bottom: 0.5rem;">
-                <i data-feather="shopping-bag" style="width: 32px; height: 32px; color: #6366f1;"></i>
-                <span>ELVATRAGO</span>
+                <i data-feather="shopping-bag" style="width: 32px; height: 32px; color: #f97316;"></i>
+                <span>GlobalClick</span>
             </a>
             <p style="color: #94a3b8; font-size: 0.95rem;">Crea tu cuenta de cliente para comprar en la tienda</p>
         </div>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
 
-                <button type="submit" style="width: 100%; padding: 0.85rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4); transition: all 0.3s ease;">
+                <button type="submit" style="width: 100%; padding: 0.85rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); transition: all 0.3s ease;">
                     Crear Cuenta de Cliente
                 </button>
             </form>
@@ -85,7 +85,7 @@
             <!-- Footer Switch -->
             <div style="margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: #94a3b8;">
                 ¿Ya tienes una cuenta? 
-                <a href="{{ route('login') }}" style="color: #818cf8; font-weight: 700;">Inicia sesión aquí</a>
+                <a href="{{ route('login') }}" style="color: #fb923c; font-weight: 700;">Inicia sesión aquí</a>
             </div>
         </div>
     </div>
