@@ -100,7 +100,7 @@
                         <i data-feather="upload-cloud" style="width: 32px; height: 32px; color: #f97316; margin-bottom: 0.5rem;"></i>
                         <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem;">Subir nuevas fotos para este producto</div>
                         <div style="color: #94a3b8; font-size: 0.75rem; margin-top: 0.2rem;">JPG, PNG, WEBP, GIF, JFIF, AVIF (Hasta 20MB)</div>
-                        <input type="file" id="editImageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewEditFiles(this)" onclick="event.stopPropagation()">
+                        <input type="file" id="editImageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="handleEditFileSelection(this.files)" onclick="this.value=null; event.stopPropagation();">
                     </div>
 
                     <div id="editFilePreviewGrid" style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem;"></div>
@@ -229,31 +229,90 @@
 
 @section('scripts')
 <script>
-    function previewEditFiles(input) {
-        const grid = document.getElementById('editFilePreviewGrid');
-        grid.innerHTML = '';
-        if (input.files && input.files.length > 0) {
-            Array.from(input.files).forEach((file) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const card = document.createElement('div');
-                    card.style.cssText = 'position: relative; width: 75px; height: 75px; border-radius: 0.65rem; overflow: hidden; border: 1px solid rgba(249,115,22,0.5); background: #0f172a;';
-                    card.innerHTML = `
-                        <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
-                        <span style="position: absolute; bottom: 0.15rem; left: 0.15rem; background: rgba(16,185,129,0.85); color: #fff; font-size: 0.6rem; padding: 0.05rem 0.3rem; border-radius: 0.2rem; font-weight: 700;">
-                            Nueva
-                        </span>
-                    `;
-                    grid.appendChild(card);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
+    let editUploadDataTransfer = new DataTransfer();
+    const editFileInput = document.getElementById('editImageFileInput');
+    const editGrid = document.getElementById('editFilePreviewGrid');
+
+    function handleEditFileSelection(files) {
+        if (!files || files.length === 0) return;
+
+        Array.from(files).forEach(file => {
+            const exists = Array.from(editUploadDataTransfer.files).some(
+                f => f.name === file.name && f.size === file.size
+            );
+            if (!exists) {
+                editUploadDataTransfer.items.add(file);
+            }
+        });
+
+        editFileInput.files = editUploadDataTransfer.files;
+        renderEditPreviews();
+    }
+
+    function removeEditFile(indexToRemove) {
+        const newDt = new DataTransfer();
+        Array.from(editUploadDataTransfer.files).forEach((file, idx) => {
+            if (idx !== indexToRemove) {
+                newDt.items.add(file);
+            }
+        });
+        editUploadDataTransfer = newDt;
+        editFileInput.files = editUploadDataTransfer.files;
+        renderEditPreviews();
+    }
+
+    function renderEditPreviews() {
+        editGrid.innerHTML = '';
+        const files = Array.from(editUploadDataTransfer.files);
+        if (files.length === 0) return;
+
+        files.forEach((file, index) => {
+            const card = document.createElement('div');
+            card.style.cssText = 'position: relative; width: 85px; height: 85px; border-radius: 0.65rem; overflow: hidden; border: 1px solid rgba(249,115,22,0.5); background: #0f172a; box-shadow: 0 4px 10px rgba(0,0,0,0.3);';
+
+            const img = document.createElement('img');
+            img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
+
+            const badge = document.createElement('span');
+            badge.style.cssText = 'position: absolute; bottom: 0.15rem; left: 0.15rem; background: rgba(16,185,129,0.85); color: #fff; font-size: 0.6rem; padding: 0.05rem 0.3rem; border-radius: 0.2rem; font-weight: 700; pointer-events: none;';
+            badge.textContent = 'Nueva';
+
+            const btnDelete = document.createElement('button');
+            btnDelete.type = 'button';
+            btnDelete.title = 'Quitar esta foto';
+            btnDelete.style.cssText = 'position: absolute; top: 0.25rem; right: 0.25rem; width: 20px; height: 20px; background: rgba(239, 68, 68, 0.95); color: #ffffff; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; font-size: 13px; font-weight: 800; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.5); z-index: 10; padding: 0;';
+            btnDelete.innerHTML = '&times;';
+
+            btnDelete.onmouseover = function() {
+                btnDelete.style.transform = 'scale(1.15)';
+                btnDelete.style.background = '#dc2626';
+            };
+            btnDelete.onmouseout = function() {
+                btnDelete.style.transform = 'scale(1)';
+                btnDelete.style.background = 'rgba(239, 68, 68, 0.95)';
+            };
+
+            btnDelete.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                removeEditFile(index);
+            };
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            card.appendChild(img);
+            card.appendChild(badge);
+            card.appendChild(btnDelete);
+            editGrid.appendChild(card);
+        });
     }
 
     // Drag & Drop
     const dropzoneEdit = document.getElementById('dropzoneEdit');
-    const editFileInput = document.getElementById('editImageFileInput');
     if (dropzoneEdit && editFileInput) {
         ['dragenter', 'dragover'].forEach(eventName => {
             dropzoneEdit.addEventListener(eventName, (e) => {
@@ -276,8 +335,7 @@
         dropzoneEdit.addEventListener('drop', (e) => {
             const dt = e.dataTransfer;
             if (dt && dt.files && dt.files.length > 0) {
-                editFileInput.files = dt.files;
-                previewEditFiles(editFileInput);
+                handleEditFileSelection(dt.files);
             }
         }, false);
     }

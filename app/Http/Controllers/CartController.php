@@ -20,6 +20,11 @@ class CartController extends Controller
 
     public function add(Request $request, Product $product)
     {
+        if (!auth()->check()) {
+            session()->put('url.intended', url()->previous());
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión o registrarte para añadir productos a tu carrito.');
+        }
+
         $quantity = (int) $request->input('quantity', 1);
         if ($quantity < 1) {
             $quantity = 1;
@@ -58,6 +63,10 @@ class CartController extends Controller
 
     public function update(Request $request, $id)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para actualizar tu carrito.');
+        }
+
         $quantity = (int) $request->input('quantity', 1);
         $cart = session()->get('cart', []);
 
@@ -81,6 +90,10 @@ class CartController extends Controller
 
     public function remove($id)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para modificar tu carrito.');
+        }
+
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
             unset($cart[$id]);
@@ -92,6 +105,10 @@ class CartController extends Controller
 
     public function clear()
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para vaciar tu carrito.');
+        }
+
         session()->forget('cart');
         return redirect()->route('cart.index')->with('success', 'El carrito ha sido vaciado.');
     }

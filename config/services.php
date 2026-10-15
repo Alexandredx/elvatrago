@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'culqi' => [
+        'public_key' => env('CULQI_PUBLIC_KEY', 'pk_test_ed8a4b679f225d3a'),
+        'secret_key' => env('CULQI_SECRET_KEY', 'sk_test_a32b6e87f168f1c3'),
+    ],
+
 ];

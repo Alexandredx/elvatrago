@@ -26,78 +26,81 @@
             </div>
 
             <div>
-                @if($order->status === 'completed')
-                    <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #34d399; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        <i data-feather="check-circle" style="width: 16px; height: 16px;"></i> Recibido / Entregado
-                    </span>
-                @elseif($order->status === 'processing')
-                    <span style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.5); color: #60a5fa; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        <i data-feather="truck" style="width: 16px; height: 16px;"></i> En Camino / Procesando
-                    </span>
-                @elseif($order->status === 'pending')
-                    <span style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        <i data-feather="clock" style="width: 16px; height: 16px;"></i> En Preparación
-                    </span>
-                @elseif($order->status === 'cancelled')
-                    <span style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #f87171; padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.4rem;">
-                        <i data-feather="x-circle" style="width: 16px; height: 16px;"></i> Cancelado
-                    </span>
-                @endif
+                <span style="{{ $order->status_badge_style }} padding: 0.5rem 1.25rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <i data-feather="{{ $order->status_badge_icon }}" style="width: 16px; height: 16px;"></i>
+                    {{ $order->status_label }}
+                </span>
             </div>
         </div>
 
-        <!-- Barra de Progreso del Pedido -->
-        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; padding: 1.5rem;">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; position: relative;">
+        <!-- Barra de Progreso del Pedido (5 Procesos) -->
+        @php
+            $currentStep = $order->status_step;
+            $isCancelled = $order->status === 'cancelled';
+            $steps = [
+                1 => ['name' => '1. Pedido Confirmado', 'desc' => 'Pago y orden registrados', 'icon' => 'check-circle'],
+                2 => ['name' => '2. Revisado por el personal', 'desc' => 'Verificado en almacén', 'icon' => 'user-check'],
+                3 => ['name' => '3. Confirmación de sus datos', 'desc' => 'Datos y dirección validados', 'icon' => 'shield'],
+                4 => ['name' => '4. Enviado', 'desc' => 'En camino al destino', 'icon' => 'truck'],
+                5 => ['name' => '5. Entregado', 'desc' => 'Recibido en destino', 'icon' => 'home'],
+            ];
+            $progressPercent = $isCancelled ? 0 : max(0, min(100, (($currentStep - 1) / 4) * 100));
+        @endphp
+
+        <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 1rem; padding: 1.75rem 1.25rem; overflow-x: auto;">
+            <div style="display: grid; grid-template-columns: repeat(5, minmax(130px, 1fr)); gap: 0.75rem; text-align: center; position: relative;">
                 
-                <!-- Paso 1: Pedido Registrado -->
-                <div>
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #10b981; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-weight: 800;">
-                        <i data-feather="check" style="width: 20px; height: 20px;"></i>
-                    </div>
-                    <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem;">1. Pedido Confirmado</div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">Pago y orden registrados</div>
+                <!-- Línea conectora de fondo -->
+                <div style="position: absolute; top: 21px; left: 10%; right: 10%; height: 4px; background: rgba(255,255,255,0.08); z-index: 0; border-radius: 9999px;">
+                    <div style="height: 100%; background: linear-gradient(90deg, #10b981, #f97316); width: {{ $progressPercent }}%; transition: width 0.4s ease; border-radius: 9999px;"></div>
                 </div>
 
-                <!-- Paso 2: En Preparación / Camino -->
-                <div>
+                @foreach($steps as $num => $step)
                     @php
-                        $step2Done = in_array($order->status, ['processing', 'completed']);
+                        $isPast = $currentStep > $num && !$isCancelled;
+                        $isCurrent = $currentStep === $num && !$isCancelled;
+                        $isFuture = $currentStep < $num && !$isCancelled;
                     @endphp
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background: {{ $step2Done ? '#10b981' : ($order->status === 'pending' ? '#f59e0b' : 'rgba(255,255,255,0.1)') }}; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-weight: 800;">
-                        @if($step2Done)
-                            <i data-feather="check" style="width: 20px; height: 20px;"></i>
-                        @else
-                            <i data-feather="package" style="width: 18px; height: 18px;"></i>
-                        @endif
-                    </div>
-                    <div style="font-weight: 700; color: {{ $step2Done || $order->status === 'pending' ? '#ffffff' : '#64748b' }}; font-size: 0.9rem;">
-                        2. En Despacho
-                    </div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">
-                        {{ $step2Done ? 'Empacado y enviado' : 'Preparando tus artículos' }}
-                    </div>
-                </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
+                        <div style="width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.6rem; font-weight: 800; transition: all 0.3s ease;
+                            @if($isCancelled)
+                                background: #1e293b; color: #ef4444; border: 2px solid rgba(239, 68, 68, 0.4);
+                            @elseif($isPast || ($isCurrent && $num === 5))
+                                background: #10b981; color: #ffffff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); border: 2px solid #34d399;
+                            @elseif($isCurrent)
+                                background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff; box-shadow: 0 0 16px rgba(249, 115, 22, 0.55); border: 2px solid #fdba74;
+                            @else
+                                background: #0f172a; color: #64748b; border: 2px solid rgba(255, 255, 255, 0.12);
+                            @endif
+                        ">
+                            @if($isPast || ($isCurrent && $num === 5))
+                                <i data-feather="check" style="width: 22px; height: 22px;"></i>
+                            @else
+                                <i data-feather="{{ $step['icon'] }}" style="width: 20px; height: 20px;"></i>
+                            @endif
+                        </div>
 
-                <!-- Paso 3: Recibido / Entregado -->
-                <div>
-                    @php
-                        $step3Done = $order->status === 'completed';
-                    @endphp
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background: {{ $step3Done ? '#10b981' : 'rgba(255,255,255,0.1)' }}; color: #ffffff; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-weight: 800;">
-                        @if($step3Done)
-                            <i data-feather="check" style="width: 20px; height: 20px;"></i>
-                        @else
-                            <i data-feather="home" style="width: 18px; height: 18px;"></i>
-                        @endif
+                        <div style="font-weight: 700; font-size: 0.85rem; line-height: 1.25; margin-bottom: 0.25rem;
+                            @if($isCancelled) color: #94a3b8;
+                            @elseif($isCurrent) color: #fb923c;
+                            @elseif($isPast) color: #ffffff;
+                            @else color: #64748b;
+                            @endif
+                        ">
+                            {{ $step['name'] }}
+                        </div>
+
+                        <div style="font-size: 0.72rem; line-height: 1.25;
+                            @if($isCancelled) color: #64748b;
+                            @elseif($isCurrent) color: #fdba74;
+                            @elseif($isPast) color: #94a3b8;
+                            @else color: #475569;
+                            @endif
+                        ">
+                            {{ $step['desc'] }}
+                        </div>
                     </div>
-                    <div style="font-weight: 700; color: {{ $step3Done ? '#ffffff' : '#64748b' }}; font-size: 0.9rem;">
-                        3. Entregado
-                    </div>
-                    <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">
-                        {{ $step3Done ? 'Pedido recibido con éxito' : 'Por entregar en destino' }}
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -178,6 +181,26 @@
                     {{ $order->shipping_address }}<br>
                     <span style="color: #94a3b8; font-size: 0.85rem;">Teléfono: {{ $order->customer_phone ?: 'No registrado' }}</span><br>
                     <span style="color: #94a3b8; font-size: 0.85rem;">Email: {{ $order->customer_email }}</span>
+                    <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed rgba(255,255,255,0.08);">
+                        <span style="font-size: 0.8rem; color: #94a3b8;">Medio de Pago:</span><br>
+                        @if($order->payment_method === 'yape')
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #00d2c4; font-weight: 700; font-size: 0.85rem;">
+                                <i data-feather="smartphone" style="width: 14px; height: 14px;"></i> Yape (BCP)
+                            </span>
+                        @else
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #fdba74; font-weight: 700; font-size: 0.85rem;">
+                                <i data-feather="credit-card" style="width: 14px; height: 14px;"></i> Tarjeta de Débito / Crédito
+                            </span>
+                        @endif
+                        @if($order->payment_reference)
+                            <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">{{ $order->payment_reference }}</div>
+                        @endif
+                        @if($order->payment_id)
+                            <div style="font-size: 0.7rem; color: #34d399; margin-top: 0.25rem;">
+                                Transacción Culqi: {{ $order->payment_id }}
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
 

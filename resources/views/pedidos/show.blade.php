@@ -6,7 +6,13 @@
 <div style="max-width: 900px; margin: 0 auto 3rem;">
     <div style="margin-bottom: 2rem;">
         <a href="{{ route('admin.orders.index') }}" style="color: #94a3b8; font-size: 0.85rem;">&larr; Volver a lista de órdenes</a>
-        <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; margin-top: 0.5rem;">Detalle de Orden: {{ $order->order_number }}</h1>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; flex-wrap: wrap; gap: 1rem;">
+            <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; margin: 0;">Detalle de Orden: {{ $order->order_number }}</h1>
+            <span style="{{ $order->status_badge_style }} padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem;">
+                <i data-feather="{{ $order->status_badge_icon }}" style="width: 14px; height: 14px;"></i>
+                {{ $order->status_label }}
+            </span>
+        </div>
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 300px; gap: 2rem; align-items: start;">
@@ -17,7 +23,14 @@
                 <strong>Nombre:</strong> {{ $order->customer_name }}<br>
                 <strong>Email:</strong> {{ $order->customer_email }}<br>
                 <strong>Teléfono:</strong> {{ $order->customer_phone }}<br>
-                <strong>Dirección de Envío:</strong> {{ $order->shipping_address }}
+                <strong>Dirección de Envío:</strong> {{ $order->shipping_address }}<br>
+                <strong>Medio de Pago:</strong> <span style="color: {{ $order->payment_method === 'yape' ? '#00d2c4' : '#fdba74' }}; font-weight: 700;">{{ $order->payment_method_name }}</span>
+                @if($order->payment_reference)
+                    <span style="font-size: 0.85rem; color: #94a3b8;">({{ $order->payment_reference }})</span>
+                @endif
+                @if($order->payment_id)
+                    <br><strong>ID Culqi:</strong> <code style="color: #34d399; font-size: 0.8rem; background: rgba(0,0,0,0.3); padding: 0.15rem 0.4rem; border-radius: 0.3rem;">{{ $order->payment_id }}</code>
+                @endif
             </div>
 
             <h2 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem;">Productos Comprados</h2>
@@ -51,10 +64,12 @@
 
                 <div style="margin-bottom: 1.25rem;">
                     <select name="status" style="width: 100%; padding: 0.8rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.15); border-radius: 0.75rem; color: #ffffff; font-weight: 600;">
-                        <option value="pending" {{ $order->status === 'pending' ? 'selected' : '' }}>Pending (Pendiente)</option>
-                        <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Processing (En proceso)</option>
-                        <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }}>Completed (Completado)</option>
-                        <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Cancelled (Cancelado)</option>
+                        <option value="confirmed" {{ in_array($order->status, ['confirmed', 'pending']) ? 'selected' : '' }}>1. Pedido Confirmado</option>
+                        <option value="reviewed" {{ $order->status === 'reviewed' ? 'selected' : '' }}>2. Revisado por el personal</option>
+                        <option value="data_confirmed" {{ $order->status === 'data_confirmed' ? 'selected' : '' }}>3. Confirmación de sus datos</option>
+                        <option value="shipped" {{ in_array($order->status, ['shipped', 'processing']) ? 'selected' : '' }}>4. Enviado (En ruta)</option>
+                        <option value="delivered" {{ in_array($order->status, ['delivered', 'completed']) ? 'selected' : '' }}>5. Entregado</option>
+                        <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>❌ Cancelado</option>
                     </select>
                 </div>
 

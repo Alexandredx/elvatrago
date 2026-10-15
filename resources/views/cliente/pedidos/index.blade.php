@@ -86,23 +86,10 @@
 
                         <!-- Estado del Pedido -->
                         <div>
-                            @if($order->status === 'completed')
-                                <span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #34d399; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <i data-feather="check-circle" style="width: 14px; height: 14px;"></i> Recibido / Entregado
-                                </span>
-                            @elseif($order->status === 'processing')
-                                <span style="background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.5); color: #60a5fa; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <i data-feather="truck" style="width: 14px; height: 14px;"></i> En Camino / Procesando
-                                </span>
-                            @elseif($order->status === 'pending')
-                                <span style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <i data-feather="clock" style="width: 14px; height: 14px;"></i> Pendiente / En Preparación
-                                </span>
-                            @elseif($order->status === 'cancelled')
-                                <span style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #f87171; padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <i data-feather="x-circle" style="width: 14px; height: 14px;"></i> Cancelado
-                                </span>
-                            @endif
+                            <span style="{{ $order->status_badge_style }} padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <i data-feather="{{ $order->status_badge_icon }}" style="width: 14px; height: 14px;"></i>
+                                {{ $order->status_label }}
+                            </span>
                         </div>
                     </div>
 
@@ -148,6 +135,9 @@
                             <div style="font-size: 0.85rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem;">
                                 <i data-feather="map-pin" style="width: 14px; height: 14px; color: #fb923c;"></i>
                                 <span>Envío a: <strong style="color: #cbd5e1;">{{ Str::limit($order->shipping_address, 45) }}</strong></span>
+                                <span style="background: {{ $order->payment_method === 'yape' ? 'rgba(116, 34, 132, 0.35)' : 'rgba(249, 115, 22, 0.2)' }}; border: 1px solid {{ $order->payment_method === 'yape' ? 'rgba(116, 34, 132, 0.6)' : 'rgba(249, 115, 22, 0.4)' }}; color: {{ $order->payment_method === 'yape' ? '#00d2c4' : '#fdba74' }}; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 0.35rem;">
+                                    {{ $order->payment_method === 'yape' ? 'Yape' : 'Tarjeta' }}
+                                </span>
                             </div>
 
                             <div style="display: flex; gap: 0.75rem; align-items: center;">

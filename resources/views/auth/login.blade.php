@@ -39,6 +39,13 @@
                 </div>
             @endif
 
+            @if(session('error'))
+                <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.875rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i data-feather="alert-circle" style="width: 16px; height: 16px;"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
             @if($errors->any())
                 <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.875rem; margin-bottom: 1.5rem;">
                     <ul style="margin: 0; padding-left: 1.25rem;">

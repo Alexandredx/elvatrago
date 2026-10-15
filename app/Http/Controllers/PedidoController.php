@@ -22,7 +22,7 @@ class PedidoController extends Controller
     public function updateStatus(Request $request, Order $order)
     {
         $request->validate([
-            'status' => 'required|in:pending,processing,completed,cancelled',
+            'status' => 'required|in:confirmed,reviewed,data_confirmed,shipped,delivered,pending,processing,completed,cancelled',
         ]);
 
         $order->update(['status' => $request->status]);

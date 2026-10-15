@@ -61,7 +61,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('shop.index')->with('success', '¡Cuenta creada exitosamente! Bienvenido a GlobalClick, ' . $user->name . '.');
+        return redirect()->intended(route('shop.index'))->with('success', '¡Cuenta creada exitosamente! Bienvenido a GlobalClick, ' . $user->name . '.');
     }
 
     public function logout(Request $request)

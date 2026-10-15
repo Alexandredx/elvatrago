@@ -97,7 +97,7 @@
 
                         <form action="{{ route('cart.add', $product->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn-action-card btn-direct">
+                            <button type="submit" class="btn-action-card btn-direct" title="{{ auth()->check() ? 'Añadir al carrito' : 'Inicia sesión o regístrate para añadir al carrito' }}">
                                 <i data-feather="shopping-cart" style="width: 14px; height: 14px;"></i> Carrito
                             </button>
                         </form>

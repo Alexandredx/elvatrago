@@ -73,7 +73,7 @@
                         <i data-feather="upload-cloud" style="width: 40px; height: 40px; color: #f97316; margin-bottom: 0.75rem;"></i>
                         <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem; margin-bottom: 0.25rem;">Haz clic para subir fotos o arrastra archivos aquí</div>
                         <div style="color: #94a3b8; font-size: 0.8rem;">Formatos soportados: JPG, PNG, WEBP, GIF, JFIF, AVIF. Hasta 20MB por archivo.</div>
-                        <input type="file" id="imageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="previewFiles(this)" onclick="event.stopPropagation()">
+                        <input type="file" id="imageFileInput" name="images[]" multiple accept="image/*" style="display: none;" onchange="handleFileSelection(this.files)" onclick="this.value=null; event.stopPropagation();">
                     </div>
 
                     <!-- Live Preview Thumbnails Container -->
@@ -195,31 +195,96 @@
 
 @section('scripts')
 <script>
-    function previewFiles(input) {
-        const grid = document.getElementById('filePreviewGrid');
-        grid.innerHTML = '';
-        if (input.files && input.files.length > 0) {
-            Array.from(input.files).forEach((file, index) => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const card = document.createElement('div');
-                    card.style.cssText = 'position: relative; width: 85px; height: 85px; border-radius: 0.65rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); background: #0f172a;';
-                    card.innerHTML = `
-                        <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">
-                        <span style="position: absolute; bottom: 0.2rem; left: 0.2rem; background: rgba(0,0,0,0.7); color: #fff; font-size: 0.65rem; padding: 0.1rem 0.35rem; border-radius: 0.25rem;">
-                            ${index === 0 ? 'Principal' : '#' + (index + 1)}
-                        </span>
-                    `;
-                    grid.appendChild(card);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
+    let uploadDataTransfer = new DataTransfer();
+    const fileInput = document.getElementById('imageFileInput');
+    const filePreviewGrid = document.getElementById('filePreviewGrid');
+
+    function handleFileSelection(files) {
+        if (!files || files.length === 0) return;
+
+        Array.from(files).forEach(file => {
+            // Evitar duplicados exactos (mismo nombre y tamaño)
+            const exists = Array.from(uploadDataTransfer.files).some(
+                f => f.name === file.name && f.size === file.size
+            );
+            if (!exists) {
+                uploadDataTransfer.items.add(file);
+            }
+        });
+
+        fileInput.files = uploadDataTransfer.files;
+        renderPreviews();
+    }
+
+    function removeFile(indexToRemove) {
+        const newDt = new DataTransfer();
+        Array.from(uploadDataTransfer.files).forEach((file, idx) => {
+            if (idx !== indexToRemove) {
+                newDt.items.add(file);
+            }
+        });
+        uploadDataTransfer = newDt;
+        fileInput.files = uploadDataTransfer.files;
+        renderPreviews();
+    }
+
+    function renderPreviews() {
+        filePreviewGrid.innerHTML = '';
+        const files = Array.from(uploadDataTransfer.files);
+        if (files.length === 0) return;
+
+        files.forEach((file, index) => {
+            const card = document.createElement('div');
+            card.style.cssText = 'position: relative; width: 95px; height: 95px; border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); background: #0f172a; box-shadow: 0 4px 10px rgba(0,0,0,0.3);';
+
+            const img = document.createElement('img');
+            img.style.cssText = 'width: 100%; height: 100%; object-fit: cover; display: block;';
+
+            // Badge indicator (Principal o número)
+            const badge = document.createElement('span');
+            badge.style.cssText = index === 0
+                ? 'position: absolute; bottom: 0.25rem; left: 0.25rem; background: #f97316; color: #ffffff; font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.35rem; border-radius: 0.25rem; pointer-events: none;'
+                : 'position: absolute; bottom: 0.25rem; left: 0.25rem; background: rgba(0,0,0,0.75); color: #cbd5e1; font-size: 0.65rem; padding: 0.1rem 0.35rem; border-radius: 0.25rem; pointer-events: none;';
+            badge.textContent = index === 0 ? 'Principal' : '#' + (index + 1);
+
+            // Botón 'X' para eliminar la foto
+            const btnDelete = document.createElement('button');
+            btnDelete.type = 'button';
+            btnDelete.title = 'Quitar esta foto';
+            btnDelete.setAttribute('aria-label', 'Eliminar foto');
+            btnDelete.style.cssText = 'position: absolute; top: 0.3rem; right: 0.3rem; width: 22px; height: 22px; background: rgba(239, 68, 68, 0.95); color: #ffffff; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; font-size: 14px; font-weight: 800; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.5); z-index: 10; padding: 0;';
+            btnDelete.innerHTML = '&times;';
+
+            btnDelete.onmouseover = function() {
+                btnDelete.style.transform = 'scale(1.15)';
+                btnDelete.style.background = '#dc2626';
+            };
+            btnDelete.onmouseout = function() {
+                btnDelete.style.transform = 'scale(1)';
+                btnDelete.style.background = 'rgba(239, 68, 68, 0.95)';
+            };
+
+            btnDelete.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                removeFile(index);
+            };
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            card.appendChild(img);
+            card.appendChild(badge);
+            card.appendChild(btnDelete);
+            filePreviewGrid.appendChild(card);
+        });
     }
 
     // Drag & Drop
     const dropzone = document.getElementById('dropzoneCreate');
-    const fileInput = document.getElementById('imageFileInput');
     if (dropzone && fileInput) {
         ['dragenter', 'dragover'].forEach(eventName => {
             dropzone.addEventListener(eventName, (e) => {
@@ -242,8 +307,7 @@
         dropzone.addEventListener('drop', (e) => {
             const dt = e.dataTransfer;
             if (dt && dt.files && dt.files.length > 0) {
-                fileInput.files = dt.files;
-                previewFiles(fileInput);
+                handleFileSelection(dt.files);
             }
         }, false);
     }

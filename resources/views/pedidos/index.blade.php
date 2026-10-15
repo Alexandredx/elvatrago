@@ -32,10 +32,16 @@
                     </td>
                     <td style="padding: 1rem 1.25rem; font-weight: 800; color: #34d399;">
                         ${{ number_format($order->total_amount, 2) }}
+                        <div style="margin-top: 0.25rem;">
+                            <span style="font-size: 0.7rem; font-weight: 700; color: {{ $order->payment_method === 'yape' ? '#00d2c4' : '#fdba74' }}; background: {{ $order->payment_method === 'yape' ? 'rgba(116, 34, 132, 0.3)' : 'rgba(249, 115, 22, 0.15)' }}; padding: 0.1rem 0.4rem; border-radius: 0.25rem;">
+                                {{ $order->payment_method === 'yape' ? 'Yape' : 'Tarjeta' }}
+                            </span>
+                        </div>
                     </td>
                     <td style="padding: 1rem 1.25rem;">
-                        <span class="badge badge-direct" style="font-size: 0.7rem;">
-                            {{ strtoupper($order->status) }}
+                        <span style="{{ $order->status_badge_style }} padding: 0.35rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            <i data-feather="{{ $order->status_badge_icon }}" style="width: 13px; height: 13px;"></i>
+                            {{ $order->status_label }}
                         </span>
                     </td>
                     <td style="padding: 1rem 1.25rem; color: #94a3b8; font-size: 0.85rem;">

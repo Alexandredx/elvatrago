@@ -129,6 +129,13 @@
                         <i data-feather="shopping-cart"></i> Añadir al Carrito
                     </button>
                 </form>
+
+                @guest
+                    <div style="margin-top: 0.85rem; padding: 0.65rem 0.85rem; background: rgba(249, 115, 22, 0.1); border: 1px dashed rgba(249, 115, 22, 0.35); border-radius: 0.75rem; font-size: 0.825rem; color: #fdba74; display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-feather="lock" style="width: 14px; height: 14px; flex-shrink: 0;"></i>
+                        <span>Para añadir al carrito debes <a href="{{ route('login') }}" style="color: #ffffff; font-weight: 700; text-decoration: underline;">iniciar sesión</a> o <a href="{{ route('register') }}" style="color: #ffffff; font-weight: 700; text-decoration: underline;">registrarte</a>.</span>
+                    </div>
+                @endguest
             </div>
 
             <!-- Features list -->
