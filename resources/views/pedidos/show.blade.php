@@ -38,8 +38,15 @@
                 @foreach($order->items as $item)
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem; background: rgba(15,23,42,0.6); border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05);">
                         <div>
-                            <div style="font-weight: 700; color: #ffffff;">{{ $item->product_title }}</div>
-                            <div style="font-size: 0.8rem; color: #94a3b8;">Cantidad: {{ $item->quantity }} x ${{ number_format($item->price, 2) }}</div>
+                            <div style="font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>{{ $item->product_title }}</span>
+                                @if(!empty($item->size))
+                                    <span style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; font-size: 0.75rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 0.3rem;">
+                                        Talla: {{ $item->size }}
+                                    </span>
+                                @endif
+                            </div>
+                            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem;">Cantidad: {{ $item->quantity }} x ${{ number_format($item->price, 2) }}</div>
                         </div>
                         <div style="font-weight: 800; color: #ffffff;">
                             ${{ number_format($item->price * $item->quantity, 2) }}

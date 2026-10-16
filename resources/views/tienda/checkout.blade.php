@@ -226,7 +226,12 @@
                         <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">
                         <div style="flex: 1; overflow: hidden;">
                             <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $item['title'] }}</div>
-                            <div style="font-size: 0.75rem; color: #94a3b8;">{{ $item['quantity'] }} unidad(es)</div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.15rem;">
+                                <span style="font-size: 0.75rem; color: #94a3b8;">{{ $item['quantity'] }} unidad(es)</span>
+                                @if(!empty($item['size']))
+                                    <span style="background: rgba(249, 115, 22, 0.2); color: #fdba74; font-size: 0.7rem; font-weight: 700; padding: 0.05rem 0.35rem; border-radius: 0.25rem;">Talla: {{ $item['size'] }}</span>
+                                @endif
+                            </div>
                         </div>
                         <div style="font-weight: 800; font-size: 0.9rem; color: #ffffff;">
                             @money($item['price'] * $item['quantity'])

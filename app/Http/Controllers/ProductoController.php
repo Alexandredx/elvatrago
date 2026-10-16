@@ -51,10 +51,14 @@ class ProductoController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'nullable|file|mimes:jpeg,png,jpg,webp,gif,svg,jfif,avif,bmp|max:20480',
             'image_urls' => 'nullable|string',
+            'video_url' => 'nullable|string|max:500',
+            'video_file' => 'nullable|file|mimes:mp4,mov,ogg,qt,webm|max:102400',
         ], [
             'images.*.file' => 'Uno de los archivos seleccionados no es un archivo válido.',
             'images.*.mimes' => 'Las imágenes deben estar en formato JPG, PNG, WEBP, GIF, JFIF o AVIF.',
             'images.*.max' => 'Cada imagen no debe superar los 20MB de tamaño.',
+            'video_file.max' => 'El archivo de video no debe superar los 100MB.',
+            'video_file.mimes' => 'El video debe estar en formato MP4, MOV, WEBM u OGG.',
             'title.required' => 'El título del producto es obligatorio.',
             'category_id.required' => 'Debes seleccionar una categoría.',
             'price.required' => 'El precio de venta es obligatorio.',
@@ -66,6 +70,38 @@ class ProductoController extends Controller
         while (Product::where('slug', $slug)->exists()) {
             $slug = "{$originalSlug}-{$count}";
             $count++;
+        }
+
+        $hasSizes = $request->boolean('has_sizes');
+        $sizeType = $request->input('size_type');
+        $sizes = null;
+
+        if ($hasSizes) {
+            if ($sizeType === 'polo') {
+                $sizes = json_encode(['S', 'M', 'L', 'XL', 'XXL']);
+            } elseif ($sizeType === 'zapatillas') {
+                $sizes = json_encode(['36', '37', '38', '39', '40', '41', '42', '43', '44', '45']);
+            } elseif ($sizeType === 'pantalon') {
+                $sizes = json_encode(['28', '30', '32', '34', '36', '38']);
+            } elseif ($sizeType === 'custom') {
+                $customArr = array_values(array_filter(array_map('trim', explode(',', $request->input('custom_sizes', '')))));
+                $sizes = json_encode($customArr ?: ['S', 'M', 'L', 'XL']);
+            }
+        }
+
+        $videoPath = null;
+        if ($request->hasFile('video_file')) {
+            $vFile = $request->file('video_file');
+            if ($vFile && $vFile->isValid()) {
+                $vDestination = public_path('uploads/products/videos');
+                if (!file_exists($vDestination)) {
+                    mkdir($vDestination, 0755, true);
+                }
+                $vExt = $vFile->getClientOriginalExtension() ?: 'mp4';
+                $vFilename = time() . '_vid_' . uniqid() . '.' . strtolower($vExt);
+                $vFile->move($vDestination, $vFilename);
+                $videoPath = 'uploads/products/videos/' . $vFilename;
+            }
         }
 
         $product = Product::create([
@@ -80,6 +116,11 @@ class ProductoController extends Controller
             'external_url' => null,
             'platform_name' => null,
             'stock' => $request->stock ?? 0,
+            'has_sizes' => $hasSizes,
+            'size_type' => $hasSizes ? $sizeType : null,
+            'sizes' => $sizes,
+            'video_url' => $request->video_url,
+            'video_path' => $videoPath,
             'is_featured' => $request->boolean('is_featured'),
             'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
         ]);
@@ -149,14 +190,60 @@ class ProductoController extends Controller
             'images' => 'nullable|array',
             'images.*' => 'nullable|file|mimes:jpeg,png,jpg,webp,gif,svg,jfif,avif,bmp|max:20480',
             'image_urls' => 'nullable|string',
+            'video_url' => 'nullable|string|max:500',
+            'video_file' => 'nullable|file|mimes:mp4,mov,ogg,qt,webm|max:102400',
         ], [
             'images.*.file' => 'Uno de los archivos seleccionados no es un archivo válido.',
             'images.*.mimes' => 'Las imágenes deben estar en formato JPG, PNG, WEBP, GIF, JFIF o AVIF.',
             'images.*.max' => 'Cada imagen no debe superar los 20MB de tamaño.',
+            'video_file.max' => 'El archivo de video no debe superar los 100MB.',
+            'video_file.mimes' => 'El video debe estar en formato MP4, MOV, WEBM u OGG.',
             'title.required' => 'El título del producto es obligatorio.',
             'category_id.required' => 'Debes seleccionar una categoría.',
             'price.required' => 'El precio de venta es obligatorio.',
         ]);
+
+        $hasSizes = $request->boolean('has_sizes');
+        $sizeType = $request->input('size_type');
+        $sizes = null;
+
+        if ($hasSizes) {
+            if ($sizeType === 'polo') {
+                $sizes = json_encode(['S', 'M', 'L', 'XL', 'XXL']);
+            } elseif ($sizeType === 'zapatillas') {
+                $sizes = json_encode(['36', '37', '38', '39', '40', '41', '42', '43', '44', '45']);
+            } elseif ($sizeType === 'pantalon') {
+                $sizes = json_encode(['28', '30', '32', '34', '36', '38']);
+            } elseif ($sizeType === 'custom') {
+                $customArr = array_values(array_filter(array_map('trim', explode(',', $request->input('custom_sizes', '')))));
+                $sizes = json_encode($customArr ?: ['S', 'M', 'L', 'XL']);
+            }
+        }
+
+        $videoPath = $product->video_path;
+        if ($request->boolean('remove_video_file')) {
+            if ($videoPath && file_exists(public_path($videoPath))) {
+                @unlink(public_path($videoPath));
+            }
+            $videoPath = null;
+        }
+
+        if ($request->hasFile('video_file')) {
+            $vFile = $request->file('video_file');
+            if ($vFile && $vFile->isValid()) {
+                if ($videoPath && file_exists(public_path($videoPath))) {
+                    @unlink(public_path($videoPath));
+                }
+                $vDestination = public_path('uploads/products/videos');
+                if (!file_exists($vDestination)) {
+                    mkdir($vDestination, 0755, true);
+                }
+                $vExt = $vFile->getClientOriginalExtension() ?: 'mp4';
+                $vFilename = time() . '_vid_' . uniqid() . '.' . strtolower($vExt);
+                $vFile->move($vDestination, $vFilename);
+                $videoPath = 'uploads/products/videos/' . $vFilename;
+            }
+        }
 
         $product->update([
             'category_id' => $request->category_id,
@@ -169,6 +256,11 @@ class ProductoController extends Controller
             'external_url' => null,
             'platform_name' => null,
             'stock' => $request->stock ?? 0,
+            'has_sizes' => $hasSizes,
+            'size_type' => $hasSizes ? $sizeType : null,
+            'sizes' => $sizes,
+            'video_url' => $request->video_url,
+            'video_path' => $videoPath,
             'is_featured' => $request->boolean('is_featured'),
             'is_active' => $request->boolean('is_active'),
         ]);

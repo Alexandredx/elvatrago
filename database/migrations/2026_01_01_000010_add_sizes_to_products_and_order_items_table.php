@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('products', function (Blueprint $table) {
+            $table->boolean('has_sizes')->default(false)->after('stock');
+            $table->string('size_type')->nullable()->after('has_sizes');
+            $table->text('sizes')->nullable()->after('size_type');
+        });
+
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->string('size')->nullable()->after('product_title');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn(['has_sizes', 'size_type', 'sizes']);
+        });
+
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->dropColumn(['size']);
+        });
+    }
+};

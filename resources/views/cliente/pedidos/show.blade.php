@@ -130,15 +130,20 @@
                             <div>
                                 <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">
                                     @if($item->product)
-                                        <a href="{{ route('shop.show', $item->product->slug) }}" style="color: inherit; text-decoration: none;">
+                                        <a href="{{ route('shop.show', $item->product->slug) }}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
                                             {{ $item->product_title }}
                                         </a>
                                     @else
                                         {{ $item->product_title }}
                                     @endif
                                 </div>
-                                <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem;">
-                                    {{ $item->quantity }} x ${{ number_format($item->price, 2) }}
+                                <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.2rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>{{ $item->quantity }} x ${{ number_format($item->price, 2) }}</span>
+                                    @if(!empty($item->size))
+                                        <span style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; font-size: 0.75rem; font-weight: 700; padding: 0.05rem 0.4rem; border-radius: 0.25rem;">
+                                            Talla: {{ $item->size }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
                         </div>

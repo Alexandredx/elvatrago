@@ -61,8 +61,15 @@
         <div style="font-weight: 700; color: #ffffff; margin-bottom: 0.75rem;">Detalle de Artículos:</div>
         <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem;">
             @foreach($order->items as $item)
-                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #94a3b8;">
-                    <span>{{ $item->quantity }}x {{ $item->product_title }}</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #94a3b8; align-items: center;">
+                    <div>
+                        <span>{{ $item->quantity }}x {{ $item->product_title }}</span>
+                        @if(!empty($item->size))
+                            <span style="background: rgba(249, 115, 22, 0.2); color: #fdba74; font-size: 0.75rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 0.3rem; margin-left: 0.4rem; display: inline-block;">
+                                Talla: {{ $item->size }}
+                            </span>
+                        @endif
+                    </div>
                     <span style="color: #ffffff; font-weight: 600;">@money($item->price * $item->quantity)</span>
                 </div>
             @endforeach

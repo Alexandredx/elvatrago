@@ -25,6 +25,20 @@ class CartController extends Controller
             return redirect()->route('login')->with('error', 'Debes iniciar sesión o registrarte para añadir productos a tu carrito.');
         }
 
+        $availableSizes = $product->available_sizes;
+        $selectedSize = $request->input('size');
+
+        if ($product->has_sizes && count($availableSizes) > 0) {
+            if (empty($selectedSize)) {
+                return back()->with('error', 'Debes seleccionar una talla para ' . $product->title . ' antes de agregarlo al carrito.');
+            }
+            if (!in_array($selectedSize, $availableSizes)) {
+                return back()->with('error', 'La talla seleccionada (' . $selectedSize . ') no es válida.');
+            }
+        } else {
+            $selectedSize = null;
+        }
+
         $quantity = (int) $request->input('quantity', 1);
         if ($quantity < 1) {
             $quantity = 1;
@@ -37,17 +51,20 @@ class CartController extends Controller
         }
 
         $cart = session()->get('cart', []);
+        $cartKey = $selectedSize ? ($product->id . '_' . \Illuminate\Support\Str::slug($selectedSize)) : (string)$product->id;
 
-        if (isset($cart[$product->id])) {
-            $newQuantity = $cart[$product->id]['quantity'] + $quantity;
+        if (isset($cart[$cartKey])) {
+            $newQuantity = $cart[$cartKey]['quantity'] + $quantity;
             if ($newQuantity > $availableStock) {
                 return back()->with('error', 'No puedes añadir más unidades de las disponibles en stock.');
             }
-            $cart[$product->id]['quantity'] = $newQuantity;
+            $cart[$cartKey]['quantity'] = $newQuantity;
         } else {
-            $cart[$product->id] = [
-                'id' => $product->id,
+            $cart[$cartKey] = [
+                'id' => $cartKey,
+                'product_id' => $product->id,
                 'title' => $product->title,
+                'size' => $selectedSize,
                 'price' => $product->effective_price,
                 'quantity' => $quantity,
                 'image' => $product->primary_image_url,
@@ -58,7 +75,8 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        return back()->with('success', '¡Producto añadido al carrito con éxito!');
+        // El cliente elige el producto y se envía directamente al carrito
+        return redirect()->route('cart.index')->with('success', '¡' . $product->title . ($selectedSize ? ' (Talla: ' . $selectedSize . ')' : '') . ' añadido a tu carrito!');
     }
 
     public function update(Request $request, $id)
@@ -71,7 +89,8 @@ class CartController extends Controller
         $cart = session()->get('cart', []);
 
         if (isset($cart[$id])) {
-            $product = Product::find($id);
+            $productId = $cart[$id]['product_id'] ?? $id;
+            $product = Product::find($productId);
             if ($product && $quantity > $product->stock) {
                 return back()->with('error', 'La cantidad supera el stock disponible (' . $product->stock . ').');
             }

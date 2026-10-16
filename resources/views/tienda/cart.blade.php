@@ -29,9 +29,16 @@
                                     <div style="display: flex; align-items: center; gap: 1rem;">
                                         <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">
                                         <div>
-                                            <a href="{{ route('shop.show', $item['slug']) }}" style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">
+                                            <a href="{{ route('shop.show', $item['slug']) }}" target="_blank" rel="noopener noreferrer" style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">
                                                 {{ $item['title'] }}
                                             </a>
+                                            @if(!empty($item['size']))
+                                                <div style="margin-top: 0.25rem;">
+                                                    <span style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.5); color: #fdba74; font-size: 0.75rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 0.35rem; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                                        <i data-feather="tag" style="width: 11px; height: 11px;"></i> Talla: {{ $item['size'] }}
+                                                    </span>
+                                                </div>
+                                            @endif
                                             <div style="font-size: 0.75rem; color: #34d399; margin-top: 0.2rem;">Stock disponible: {{ $item['stock'] }}</div>
                                         </div>
                                     </div>

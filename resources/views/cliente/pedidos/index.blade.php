@@ -110,7 +110,7 @@
                                         <div>
                                             <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">
                                                 @if($item->product)
-                                                    <a href="{{ route('shop.show', $item->product->slug) }}" style="color: inherit; text-decoration: none;">
+                                                    <a href="{{ route('shop.show', $item->product->slug) }}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
                                                         {{ $item->product_title }}
                                                     </a>
                                                 @else

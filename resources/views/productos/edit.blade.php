@@ -112,6 +112,62 @@
                         </label>
                         <textarea name="image_urls" rows="2" placeholder="https://ejemplo.com/fotos/otra-imagen.jpg" style="width: 100%; padding: 0.75rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.65rem; color: #ffffff; font-family: monospace; font-size: 0.8rem;"></textarea>
                     </div>
+
+                    <!-- Video del Producto (Opcional) -->
+                    <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div style="margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.95rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-feather="video" style="color: #f97316; width: 17px; height: 17px;"></i> Video Demostrativo del Producto <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 400;">(Opcional)</span>
+                            </label>
+                            <p style="color: #94a3b8; font-size: 0.78rem; margin: 0.2rem 0 0;">Permite a tus clientes ver el producto en video (sube un archivo o pega un enlace de YouTube/Vimeo).</p>
+                        </div>
+
+                        @if($product->video_path)
+                            <div id="currentUploadedVideoBox" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0.75rem; padding: 0.85rem 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem; color: #34d399; font-size: 0.85rem; font-weight: 600;">
+                                    <i data-feather="film" style="width: 16px; height: 16px;"></i>
+                                    <span>Video actual subido: <code>{{ basename($product->video_path) }}</code></span>
+                                </div>
+                                <label style="display: inline-flex; align-items: center; gap: 0.4rem; color: #f87171; font-size: 0.8rem; cursor: pointer;">
+                                    <input type="checkbox" name="remove_video_file" value="1" style="accent-color: #ef4444;">
+                                    <span>Eliminar este archivo</span>
+                                </label>
+                            </div>
+                        @endif
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: start;">
+                            <!-- Option A: Video URL -->
+                            <div>
+                                <label style="display: block; font-size: 0.825rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.35rem;">
+                                    Enlace de Video (YouTube, Vimeo o MP4 web)
+                                </label>
+                                <input type="url" name="video_url" id="videoUrlInput" value="{{ old('video_url', $product->video_url) }}" placeholder="https://www.youtube.com/watch?v=..." oninput="previewVideoUrl(this.value)" style="width: 100%; padding: 0.75rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.65rem; color: #ffffff; font-size: 0.85rem;">
+                                <span style="font-size: 0.73rem; color: #64748b; margin-top: 0.25rem; display: block;">Ej. YouTube, Vimeo o MP4 directo.</span>
+                            </div>
+
+                            <!-- Option B: Upload Video File -->
+                            <div>
+                                <label style="display: block; font-size: 0.825rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.35rem;">
+                                    O sube un nuevo archivo de video (MP4, WebM)
+                                </label>
+                                <input type="file" name="video_file" id="videoFileInput" accept="video/mp4,video/webm,video/ogg,video/quicktime" onchange="previewVideoFile(this)" style="width: 100%; padding: 0.65rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.65rem; color: #ffffff; font-size: 0.8rem;">
+                                <span style="font-size: 0.73rem; color: #64748b; margin-top: 0.25rem; display: block;">MP4, WebM o MOV (Hasta 100MB).</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Video Preview Box -->
+                        <div id="videoPreviewContainer" style="display: none; margin-top: 1rem; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(249, 115, 22, 0.4); border-radius: 0.85rem; padding: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                                <span style="font-size: 0.85rem; font-weight: 700; color: #34d399; display: flex; align-items: center; gap: 0.35rem;">
+                                    <i data-feather="play-circle" style="width: 16px; height: 16px;"></i> Previsualización del Video
+                                </span>
+                                <button type="button" onclick="clearVideoPreview()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 0.4rem; cursor: pointer;">
+                                    Quitar Video
+                                </button>
+                            </div>
+                            <div id="videoPlayerWrapper" style="position: relative; width: 100%; max-width: 500px; aspect-ratio: 16/9; background: #000; border-radius: 0.5rem; overflow: hidden; margin: 0 auto;"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- CARD 3: Pricing -->
@@ -158,6 +214,58 @@
                         </label>
                         <input type="number" name="stock" id="stock" required min="0" value="{{ old('stock', $product->stock) }}" style="width: 100%; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; font-weight: 700;">
                         <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-top: 0.35rem;">Actualiza el stock disponible para evitar sobreventas.</span>
+                    </div>
+                </div>
+
+                <!-- CARD 5: Tallas y Variantes de Ropa / Calzado -->
+                <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                        <div>
+                            <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-feather="tag" style="color: #f97316; width: 18px; height: 18px;"></i> Tallas de Producto (Ropa, Calzado, etc.)
+                            </h3>
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin: 0.25rem 0 0;">Configura si este producto requiere que el cliente elija una talla antes de añadirlo al carrito.</p>
+                        </div>
+                        <label style="display: inline-flex; align-items: center; cursor: pointer; gap: 0.5rem; background: rgba(15, 23, 42, 0.6); padding: 0.4rem 0.85rem; border-radius: 0.6rem; border: 1px solid rgba(255,255,255,0.1);">
+                            <input type="checkbox" name="has_sizes" id="hasSizesToggle" value="1" {{ old('has_sizes', $product->has_sizes) ? 'checked' : '' }} onchange="toggleSizeOptions(this.checked)" style="width: 17px; height: 17px; accent-color: #f97316; cursor: pointer;">
+                            <span style="font-size: 0.875rem; font-weight: 700; color: #ffffff;">Habilitar Tallas</span>
+                        </label>
+                    </div>
+
+                    <div id="sizesConfigSection" style="display: {{ old('has_sizes', $product->has_sizes) ? 'block' : 'none' }}; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
+                        <div style="margin-bottom: 1.25rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.5rem;">
+                                Tipo de Prenda / Preset de Tallas:
+                            </label>
+                            @php
+                                $currentType = old('size_type', $product->size_type ?: 'polo');
+                            @endphp
+                            <select name="size_type" id="sizeTypeSelect" onchange="handleSizeTypeChange(this.value)" style="width: 100%; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; font-weight: 600;">
+                                <option value="polo" {{ $currentType == 'polo' ? 'selected' : '' }}>👕 Polos / Camisetas / Casacas (S, M, L, XL, XXL)</option>
+                                <option value="zapatillas" {{ $currentType == 'zapatillas' ? 'selected' : '' }}>👟 Calzado / Zapatillas (36, 37, 38, 39, 40, 41, 42, 43, 44, 45)</option>
+                                <option value="pantalon" {{ $currentType == 'pantalon' ? 'selected' : '' }}>👖 Pantalones / Jeans (28, 30, 32, 34, 36, 38)</option>
+                                <option value="custom" {{ $currentType == 'custom' ? 'selected' : '' }}>⚙️ Personalizado (Escribir tallas libres)</option>
+                            </select>
+                        </div>
+
+                        @php
+                            $customVal = old('custom_sizes');
+                            if (!$customVal && $product->size_type === 'custom' && $product->sizes) {
+                                $decoded = json_decode($product->sizes, true);
+                                $customVal = is_array($decoded) ? implode(', ', $decoded) : $product->sizes;
+                            }
+                        @endphp
+                        <div id="customSizesGroup" style="display: {{ $currentType == 'custom' ? 'block' : 'none' }}; margin-bottom: 1rem;">
+                            <label style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.5rem;">
+                                Tallas Personalizadas (Separadas por comas)
+                            </label>
+                            <input type="text" name="custom_sizes" id="customSizesInput" value="{{ $customVal }}" oninput="renderSizeBadges()" placeholder="Ej. XS, S, M, L, XL, 3XL ó 34, 36, 38, 40" style="width: 100%; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.9rem;">
+                        </div>
+
+                        <div>
+                            <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 600; margin-bottom: 0.4rem;">Previsualización de tallas para el cliente:</div>
+                            <div id="sizesPreviewBadges" style="display: flex; flex-wrap: wrap; gap: 0.45rem;"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -355,5 +463,106 @@
         }
     }
     calculateDiscount();
+
+    function toggleSizeOptions(enabled) {
+        const section = document.getElementById('sizesConfigSection');
+        if (section) section.style.display = enabled ? 'block' : 'none';
+        if (enabled) renderSizeBadges();
+    }
+
+    function handleSizeTypeChange(type) {
+        const customGroup = document.getElementById('customSizesGroup');
+        if (customGroup) customGroup.style.display = (type === 'custom') ? 'block' : 'none';
+        renderSizeBadges();
+    }
+
+    function renderSizeBadges() {
+        const container = document.getElementById('sizesPreviewBadges');
+        if (!container) return;
+        const type = document.getElementById('sizeTypeSelect')?.value || 'polo';
+        let sizes = [];
+
+        if (type === 'polo') {
+            sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+        } else if (type === 'zapatillas') {
+            sizes = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
+        } else if (type === 'pantalon') {
+            sizes = ['28', '30', '32', '34', '36', '38'];
+        } else if (type === 'custom') {
+            const val = document.getElementById('customSizesInput')?.value || '';
+            sizes = val.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            if (sizes.length === 0) sizes = ['Ej. Talla 1', 'Talla 2'];
+        }
+
+        container.innerHTML = sizes.map(s => `
+            <span style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.45); color: #fdba74; font-size: 0.8rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 0.45rem;">
+                ${s}
+            </span>
+        `).join('');
+    }
+    renderSizeBadges();
+
+    // Video preview handlers
+    function previewVideoUrl(url) {
+        const container = document.getElementById('videoPreviewContainer');
+        const wrapper = document.getElementById('videoPlayerWrapper');
+        if (!url || !url.trim()) {
+            if (!document.getElementById('videoFileInput').files.length) {
+                container.style.display = 'none';
+            }
+            return;
+        }
+
+        url = url.trim();
+        let embed = '';
+
+        const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+        if (ytMatch) {
+            embed = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+            const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)/);
+            if (vimeoMatch) {
+                embed = `<iframe src="https://player.vimeo.com/video/${vimeoMatch[3]}" style="width: 100%; height: 100%; border: none;" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            } else if (url.match(/\.(mp4|webm|ogg|mov)(\?.*)?$/i)) {
+                embed = `<video src="${url}" controls style="width: 100%; height: 100%; object-fit: contain;"></video>`;
+            } else {
+                embed = `<iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>`;
+            }
+        }
+
+        wrapper.innerHTML = embed;
+        container.style.display = 'block';
+    }
+
+    function previewVideoFile(input) {
+        const container = document.getElementById('videoPreviewContainer');
+        const wrapper = document.getElementById('videoPlayerWrapper');
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const fileUrl = URL.createObjectURL(file);
+            wrapper.innerHTML = `<video src="${fileUrl}" controls style="width: 100%; height: 100%; object-fit: contain;"></video>`;
+            container.style.display = 'block';
+        }
+    }
+
+    function clearVideoPreview() {
+        document.getElementById('videoUrlInput').value = '';
+        document.getElementById('videoFileInput').value = '';
+        document.getElementById('videoPlayerWrapper').innerHTML = '';
+        document.getElementById('videoPreviewContainer').style.display = 'none';
+    }
+
+    @if($product->video_path)
+        (function() {
+            const container = document.getElementById('videoPreviewContainer');
+            const wrapper = document.getElementById('videoPlayerWrapper');
+            if (container && wrapper) {
+                wrapper.innerHTML = `<video src="{{ asset($product->video_path) }}" controls style="width: 100%; height: 100%; object-fit: contain;"></video>`;
+                container.style.display = 'block';
+            }
+        })();
+    @elseif($product->video_url)
+        previewVideoUrl(@json($product->video_url));
+    @endif
 </script>
 @endsection

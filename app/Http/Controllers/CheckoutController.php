@@ -118,16 +118,18 @@ class CheckoutController extends Controller
         ]);
 
         // Create Order Items & reduce stock
-        foreach ($cart as $id => $item) {
+        foreach ($cart as $key => $item) {
+            $productId = $item['product_id'] ?? $key;
             OrderItem::create([
                 'order_id' => $order->id,
-                'product_id' => $id,
+                'product_id' => $productId,
                 'product_title' => $item['title'],
+                'size' => $item['size'] ?? null,
                 'quantity' => $item['quantity'],
                 'price' => $item['price'],
             ]);
 
-            $product = Product::find($id);
+            $product = Product::find($productId);
             if ($product) {
                 $product->decrement('stock', $item['quantity']);
             }
