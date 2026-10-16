@@ -24,18 +24,21 @@ class ClientOrderController extends Controller
             ->latest();
 
         // Conteo de pedidos para las pestañas
+        $activeStatuses = ['confirmed', 'reviewed', 'data_confirmed', 'shipped', 'pending', 'processing'];
+        $completedStatuses = ['delivered', 'completed'];
+
         $counts = [
             'all' => (clone $baseQuery)->count(),
-            'active' => (clone $baseQuery)->whereIn('status', ['pending', 'processing'])->count(),
-            'completed' => (clone $baseQuery)->where('status', 'completed')->count(),
+            'active' => (clone $baseQuery)->whereIn('status', $activeStatuses)->count(),
+            'completed' => (clone $baseQuery)->whereIn('status', $completedStatuses)->count(),
             'cancelled' => (clone $baseQuery)->where('status', 'cancelled')->count(),
         ];
 
         // Aplicar filtro si se seleccionó
         if ($filter === 'active') {
-            $baseQuery->whereIn('status', ['pending', 'processing']);
+            $baseQuery->whereIn('status', $activeStatuses);
         } elseif ($filter === 'completed') {
-            $baseQuery->where('status', 'completed');
+            $baseQuery->whereIn('status', $completedStatuses);
         } elseif ($filter === 'cancelled') {
             $baseQuery->where('status', 'cancelled');
         }

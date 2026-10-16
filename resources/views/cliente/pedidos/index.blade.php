@@ -147,8 +147,8 @@
                                     <i data-feather="file-text" style="width: 14px; height: 14px;"></i> Ver Comprobante
                                 </a>
 
-                                <!-- Si el pedido ya fue completado/recibido, permitir solicitar devolución si aplica -->
-                                @if($order->status === 'completed')
+                                <!-- Si el pedido ya fue entregado/completado, permitir solicitar devolución si aplica -->
+                                @if(in_array($order->status, ['delivered', 'completed']))
                                     @php
                                         $existingReturn = $order->returnRequests->first();
                                     @endphp

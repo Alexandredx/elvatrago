@@ -39,8 +39,8 @@
             $isCancelled = $order->status === 'cancelled';
             $steps = [
                 1 => ['name' => '1. Pedido Confirmado', 'desc' => 'Pago y orden registrados', 'icon' => 'check-circle'],
-                2 => ['name' => '2. Revisado por el personal', 'desc' => 'Verificado en almacén', 'icon' => 'user-check'],
-                3 => ['name' => '3. Confirmación de sus datos', 'desc' => 'Datos y dirección validados', 'icon' => 'shield'],
+                2 => ['name' => '2. Revisado por el personal', 'desc' => 'Verificado por el administrador', 'icon' => 'user-check'],
+                3 => ['name' => '3. Datos Confirmados', 'desc' => 'Datos de envío y entrega confirmados', 'icon' => 'shield'],
                 4 => ['name' => '4. Enviado', 'desc' => 'En camino al destino', 'icon' => 'truck'],
                 5 => ['name' => '5. Entregado', 'desc' => 'Recibido en destino', 'icon' => 'home'],
             ];

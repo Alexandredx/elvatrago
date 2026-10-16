@@ -49,7 +49,7 @@ class Order extends Model
         return match($this->status) {
             'confirmed', 'pending' => 'Pedido Confirmado',
             'reviewed' => 'Revisado por el personal',
-            'data_confirmed' => 'Confirmación de sus datos',
+            'data_confirmed' => 'Datos Confirmados',
             'shipped', 'processing' => 'Enviado',
             'delivered', 'completed' => 'Entregado',
             'cancelled' => 'Cancelado',
