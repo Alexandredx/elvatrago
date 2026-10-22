@@ -6,6 +6,7 @@ use App\Models\ClickLog;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ReturnRequest;
+use App\Models\Claim;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $totalOrders = Order::count();
         $totalRevenue = Order::where('status', '!=', 'cancelled')->sum('total_amount');
         $pendingReturns = ReturnRequest::where('status', 'pending')->count();
+        $pendingClaims = Claim::where('status', 'pending')->count();
 
         $recentOrders = Order::latest()->take(6)->get();
         $latestProducts = Product::with('category')->latest()->take(5)->get();
@@ -29,6 +31,7 @@ class DashboardController extends Controller
             'totalOrders',
             'totalRevenue',
             'pendingReturns',
+            'pendingClaims',
             'recentOrders',
             'latestProducts'
         ));

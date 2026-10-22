@@ -12,14 +12,32 @@ use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ReturnRequestController;
 use App\Http\Controllers\TiendaController;
+use App\Http\Controllers\LegalController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
+
+// =========================================================================
+// Módulo de Políticas y Normativas Legales
+// =========================================================================
+Route::prefix('politicas')->name('legal.')->group(function () {
+    Route::get('/', [LegalController::class, 'index'])->name('index');
+    Route::get('/terminos-y-condiciones', [LegalController::class, 'terms'])->name('terms');
+    Route::get('/privacidad', [LegalController::class, 'privacy'])->name('privacy');
+    Route::get('/envios-y-devoluciones', [LegalController::class, 'returns'])->name('returns');
+    Route::get('/cookies', [LegalController::class, 'cookies'])->name('cookies');
+});
+
+// Libro de Reclamaciones Virtual
+Route::get('/libro-de-reclamaciones', [LegalController::class, 'claims'])->name('legal.claims');
+Route::post('/libro-de-reclamaciones', [LegalController::class, 'storeClaim'])->name('legal.claims.store');
+Route::get('/libro-de-reclamaciones/constancia/{claimNumber}', [LegalController::class, 'claimSuccess'])->name('legal.claims.success');
 
 // =========================================================================
 // Rutas Públicas (Tienda y Catálogo)
 // =========================================================================
 Route::get('/', [TiendaController::class, 'index'])->name('shop.index');
 Route::get('/product/{slug}', [TiendaController::class, 'show'])->name('shop.show');
+Route::get('/p/{identifier}', [TiendaController::class, 'shortRedirect'])->name('shop.short');
 
 // Solicitud pública de devolución para clientes
 Route::get('/solicitar-devolucion', [ReturnRequestController::class, 'showPublicForm'])->name('returns.public.create');
@@ -31,7 +49,7 @@ Route::get('/configuracion/moneda', function () {
 })->name('settings.currency');
 
 Route::post('/configuracion/moneda', function (\Illuminate\Http\Request $request) {
-    $code = strtoupper($request->input('currency', 'USD'));
+    $code = strtoupper($request->input('currency', 'PEN'));
     if (in_array($code, ['USD', 'PEN'])) {
         session(['currency' => $code]);
         $nombre = $code === 'PEN' ? 'Soles Peruanos (PEN - S/.)' : 'Dólares Americanos (USD - $)';
@@ -107,5 +125,10 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::get('returns/{return}', [ReturnRequestController::class, 'show'])->name('returns.show');
     Route::patch('returns/{return}/status', [ReturnRequestController::class, 'updateStatus'])->name('returns.update-status');
     Route::delete('returns/{return}', [ReturnRequestController::class, 'destroy'])->name('returns.destroy');
+
+    // Módulo: Libro de Reclamaciones
+    Route::get('claims', [LegalController::class, 'adminIndex'])->name('claims.index');
+    Route::get('claims/{claim}', [LegalController::class, 'adminShow'])->name('claims.show');
+    Route::patch('claims/{claim}', [LegalController::class, 'adminUpdate'])->name('claims.update');
 });
 

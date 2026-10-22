@@ -91,6 +91,15 @@
                     </div>
                 </div>
 
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: flex; align-items: flex-start; gap: 0.65rem; font-size: 0.8rem; color: #cbd5e1; cursor: pointer; line-height: 1.4;">
+                        <input type="checkbox" name="terms" value="1" required {{ old('terms') ? 'checked' : '' }} style="accent-color: #f97316; width: 16px; height: 16px; margin-top: 0.15rem; flex-shrink: 0; cursor: pointer;">
+                        <span>
+                            He leído y acepto los <a href="{{ route('legal.terms') }}" target="_blank" style="color: #fb923c; font-weight: 700; text-decoration: underline;">Términos y Condiciones</a> y la <a href="{{ route('legal.privacy') }}" target="_blank" style="color: #34d399; font-weight: 700; text-decoration: underline;">Política de Privacidad</a> de GlobalClick.
+                        </span>
+                    </label>
+                </div>
+
                 <button type="submit" style="width: 100%; padding: 0.85rem; background: var(--accent-gradient); border: none; border-radius: 0.75rem; color: #ffffff; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4); transition: all 0.3s ease;">
                     Crear Cuenta de Cliente
                 </button>

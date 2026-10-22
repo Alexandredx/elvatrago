@@ -179,7 +179,7 @@
                                 <div>
                                     <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Número Oficial Yape:</div>
                                     <div style="font-size: 1.35rem; font-weight: 800; color: #ffffff; letter-spacing: 1px;">987 654 321</div>
-                                    <div style="font-size: 0.8rem; color: #00d2c4; font-weight: 600;">GlobalClick Perú S.A.C.</div>
+                                    <div style="font-size: 0.8rem; color: #00d2c4; font-weight: 600;">GlobalClick - Tienda Oficial</div>
                                 </div>
                                 <div style="text-align: right;">
                                     <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase;">Monto a Yapear:</div>
@@ -203,6 +203,25 @@
                             <span>Obtén tu código de 6 dígitos en tu app Yape: Menú &gt; <strong>Código de aprobación</strong>. Es seguro y de un solo uso.</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Aceptación Legal de Términos y Mayoría de Edad -->
+                <div style="margin-bottom: 1.5rem; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.85rem; padding: 1.15rem;">
+                    <label style="display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.85rem; color: #cbd5e1; cursor: pointer; line-height: 1.5;">
+                        <input type="checkbox" name="terms" value="1" required {{ old('terms') ? 'checked' : '' }} style="accent-color: #10b981; width: 18px; height: 18px; margin-top: 0.15rem; flex-shrink: 0; cursor: pointer;">
+                        <span>
+                            Declaro ser <strong>mayor de dieciocho (18) años</strong>, haber leído y aceptar expresamente los 
+                            <a href="{{ route('legal.terms') }}" target="_blank" style="color: #fb923c; font-weight: 700; text-decoration: underline;">Términos y Condiciones</a>, la 
+                            <a href="{{ route('legal.privacy') }}" target="_blank" style="color: #34d399; font-weight: 700; text-decoration: underline;">Política de Privacidad</a> y la 
+                            <a href="{{ route('legal.returns') }}" target="_blank" style="color: #60a5fa; font-weight: 700; text-decoration: underline;">Política de Devoluciones</a> de GlobalClick.
+                        </span>
+                    </label>
+                    @error('terms')
+                        <div style="color: #fca5a5; font-size: 0.8rem; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.35rem;">
+                            <i data-feather="alert-circle" style="width: 14px; height: 14px;"></i>
+                            <span>{{ $message }}</span>
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Botón de Confirmación -->

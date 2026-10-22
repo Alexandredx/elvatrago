@@ -236,43 +236,125 @@
                     Productos de la Orden ({{ $order->items->count() }})
                 </h2>
 
-                <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem;">
                     @foreach($order->items as $item)
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1rem; background: rgba(15,23,42,0.6); border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.05);">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                @if($item->product && $item->product->primary_image_url)
-                                    <img src="{{ $item->product->primary_image_url }}" alt="" style="width: 48px; height: 48px; object-fit: cover; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">
-                                @else
-                                    <div style="width: 48px; height: 48px; border-radius: 0.5rem; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #64748b;">
-                                        <i data-feather="package" style="width: 22px; height: 22px;"></i>
-                                    </div>
-                                @endif
+                        @php
+                            $prod = $item->product;
+                            $hasSupplier = $prod && $prod->has_supplier;
+                        @endphp
+                        <div style="background: rgba(15,23,42,0.6); border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.06); padding: 1.15rem; display: flex; flex-direction: column; gap: 0.85rem;">
+                            <!-- Top: Item Info & Price -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    @if($prod && $prod->primary_image_url)
+                                        <img src="{{ $prod->primary_image_url }}" alt="" style="width: 52px; height: 52px; object-fit: cover; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.1);">
+                                    @else
+                                        <div style="width: 52px; height: 52px; border-radius: 0.5rem; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: #64748b;">
+                                            <i data-feather="package" style="width: 22px; height: 22px;"></i>
+                                        </div>
+                                    @endif
 
-                                <div>
-                                    <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem;">
-                                        <span>{{ $item->product_title }}</span>
-                                        @if(!empty($item->size))
-                                            <span style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; font-size: 0.75rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 0.3rem;">
-                                                Talla: {{ $item->size }}
-                                            </span>
-                                        @endif
+                                    <div>
+                                        <div style="font-weight: 700; color: #ffffff; font-size: 0.975rem; display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                                            <span>{{ $item->product_title }}</span>
+                                            @if(!empty($item->size))
+                                                <span style="background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.4); color: #fdba74; font-size: 0.75rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 0.3rem;">
+                                                    Talla: {{ $item->size }}
+                                                </span>
+                                            @endif
+                                            @if($prod)
+                                                <a href="{{ $prod->short_url }}" target="_blank" title="Ver producto (Link Corto)" style="color: #38bdf8; font-size: 0.75rem; font-family: monospace; text-decoration: none; display: inline-flex; align-items: center; gap: 0.2rem; background: rgba(56, 189, 248, 0.1); padding: 0.1rem 0.35rem; border-radius: 0.25rem;">
+                                                    /p/{{ $prod->short_code ?: $prod->id }}
+                                                </a>
+                                            @endif
+                                        </div>
+                                        <div style="font-size: 0.825rem; color: #94a3b8; margin-top: 0.25rem;">
+                                            Cantidad: <strong style="color: #cbd5e1;">{{ $item->quantity }}</strong> &bull; Precio venta unitario: <strong style="color: #ffffff;">S/. {{ number_format($item->price, 2) }}</strong>
+                                        </div>
                                     </div>
-                                    <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.15rem;">
-                                        Cantidad: <strong style="color: #cbd5e1;">{{ $item->quantity }}</strong> &bull; Precio unitario: ${{ number_format($item->price, 2) }}
+                                </div>
+
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 800; color: #ffffff; font-size: 1.1rem;">
+                                        S/. {{ number_format($item->price * $item->quantity, 2) }}
                                     </div>
+                                    <div style="font-size: 0.75rem; color: #64748b;">Subtotal venta</div>
                                 </div>
                             </div>
 
-                            <div style="font-weight: 800; color: #ffffff; font-size: 1rem;">
-                                ${{ number_format($item->price * $item->quantity, 2) }}
-                            </div>
+                            <!-- Bottom: Supplier & Sourcing Info for Admin -->
+                            @if($hasSupplier)
+                                <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(249, 115, 22, 0.25); border-radius: 0.65rem; padding: 0.85rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+                                    <div style="font-size: 0.825rem; line-height: 1.4;">
+                                        <div style="display: flex; align-items: center; gap: 0.4rem; color: #fdba74; font-weight: 700;">
+                                            <i data-feather="truck" style="width: 13px; height: 13px;"></i>
+                                            <span>Proveedor: {{ $prod->supplier_name ?: 'Mayorista registrado' }}</span>
+                                            @if($prod->supplier_sku)
+                                                <span style="color: #94a3b8; font-weight: 400; font-family: monospace; font-size: 0.75rem;">(SKU: {{ $prod->supplier_sku }})</span>
+                                            @endif
+                                        </div>
+                                        <div style="font-size: 0.78rem; color: #cbd5e1; margin-top: 0.2rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                                            @if(!is_null($prod->supplier_cost))
+                                                <span>Costo Proveedor: <strong style="color: #ffffff;">S/. {{ number_format($prod->supplier_cost, 2) }}</strong> c/u</span>
+                                                <span>&bull; Costo total lote: <strong style="color: #ffffff;">S/. {{ number_format($prod->supplier_cost * $item->quantity, 2) }}</strong></span>
+                                                @php
+                                                    $itemProfit = ($item->price - $prod->supplier_cost) * $item->quantity;
+                                                @endphp
+                                                <span style="color: #34d399; font-weight: 700;">&bull; Ganancia neta: +S/. {{ number_format($itemProfit, 2) }}</span>
+                                            @endif
+                                        </div>
+                                        @if($prod->supplier_notes)
+                                            <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 0.25rem; font-style: italic;">
+                                                Nota: {{ Str::limit($prod->supplier_notes, 80) }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Supplier Actions: Web link & WhatsApp order -->
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                        @if($prod->supplier_url)
+                                            <a href="{{ $prod->supplier_url }}" target="_blank" rel="noopener" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; padding: 0.45rem 0.75rem; border-radius: 0.5rem; font-size: 0.78rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                                <i data-feather="external-link" style="width: 13px; height: 13px;"></i> Abrir Web Proveedor
+                                            </a>
+                                        @endif
+
+                                        @if($prod->supplier_contact)
+                                            @php
+                                                $waMsg = "Hola " . ($prod->supplier_name ?: 'amigo') . ", tengo un nuevo pedido para despachar:\n"
+                                                       . "📦 Producto: " . $item->product_title . ($item->size ? " (Talla: " . $item->size . ")" : "") . "\n"
+                                                       . "🔢 Cantidad: " . $item->quantity . " unidad(es)\n"
+                                                       . "👤 Cliente: " . $order->customer_name . "\n"
+                                                       . "📞 Teléfono Cliente: " . ($order->customer_phone ?: 'No indicado') . "\n"
+                                                       . "📍 Dirección de Entrega: " . $order->shipping_address . "\n"
+                                                       . "🔖 N° de Orden: #" . $order->order_number . "\n"
+                                                       . "¿Me confirma disponibilidad y despacho por favor? Gracias.";
+                                                $supplierWaLink = $prod->getSupplierWhatsappUrl($waMsg);
+                                            @endphp
+                                            <a href="{{ $supplierWaLink }}" target="_blank" rel="noopener" style="background: rgba(37, 211, 102, 0.2); border: 1px solid rgba(37, 211, 102, 0.45); color: #25d366; padding: 0.45rem 0.75rem; border-radius: 0.5rem; font-size: 0.78rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;" title="Enviar pedido con datos de envío al WhatsApp del proveedor">
+                                                <i data-feather="message-circle" style="width: 13px; height: 13px;"></i> Pedir por WhatsApp
+                                            </a>
+                                        @endif
+
+                                        <a href="{{ route('admin.products.edit', $prod->id) }}" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; padding: 0.45rem 0.65rem; border-radius: 0.5rem; font-size: 0.75rem; text-decoration: none;" title="Editar datos del proveedor">
+                                            <i data-feather="edit-2" style="width: 12px; height: 12px;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            @elseif($prod)
+                                <div style="background: rgba(30, 41, 59, 0.4); border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 0.5rem; padding: 0.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: #94a3b8;">
+                                    <span>Este producto no tiene proveedor asignado todavía.</span>
+                                    <a href="{{ route('admin.products.edit', $prod->id) }}" style="color: #f97316; font-weight: 600; text-decoration: underline;">
+                                        + Asignar Proveedor
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
 
                 <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: #ffffff; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">
                     <span>Total de la Orden:</span>
-                    <span style="color: #34d399;">${{ number_format($order->total_amount, 2) }}</span>
+                    <span style="color: #34d399;">S/. {{ number_format($order->total_amount, 2) }}</span>
                 </div>
             </div>
         </div>

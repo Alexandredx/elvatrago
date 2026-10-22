@@ -13,6 +13,7 @@ class Product extends Model
         'category_id',
         'title',
         'slug',
+        'short_code',
         'short_description',
         'description',
         'price',
@@ -20,6 +21,12 @@ class Product extends Model
         'type',
         'external_url',
         'platform_name',
+        'supplier_name',
+        'supplier_url',
+        'supplier_cost',
+        'supplier_contact',
+        'supplier_sku',
+        'supplier_notes',
         'stock',
         'has_sizes',
         'size_type',
@@ -33,6 +40,7 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
+        'supplier_cost' => 'decimal:2',
         'stock' => 'integer',
         'has_sizes' => 'boolean',
         'is_featured' => 'boolean',
@@ -205,5 +213,59 @@ class Product extends Model
             return $this->video_url;
         }
         return null;
+    }
+
+    public function getShortUrlAttribute(): string
+    {
+        $code = $this->short_code ?: $this->id;
+        return url('/p/' . $code);
+    }
+
+    public function getHasSupplierAttribute(): bool
+    {
+        return !empty($this->supplier_name) || !empty($this->supplier_url) || !empty($this->supplier_contact) || !is_null($this->supplier_cost);
+    }
+
+    public function getSupplierProfitAttribute(): ?float
+    {
+        if (is_null($this->supplier_cost)) {
+            return null;
+        }
+        return (float) ($this->effective_price - (float) $this->supplier_cost);
+    }
+
+    public function getSupplierProfitMarginPercentAttribute(): ?float
+    {
+        $profit = $this->supplier_profit;
+        if (is_null($profit) || $this->effective_price <= 0) {
+            return null;
+        }
+        return round(($profit / $this->effective_price) * 100, 1);
+    }
+
+    public function getSanitizedSupplierContactAttribute(): ?string
+    {
+        if (empty($this->supplier_contact)) {
+            return null;
+        }
+        $digits = preg_replace('/[^\d]/', '', $this->supplier_contact);
+        // Si empieza con 9 dígitos peruanos y no tiene código de país, agregar 51
+        if (strlen($digits) === 9 && str_starts_with($digits, '9')) {
+            $digits = '51' . $digits;
+        }
+        return $digits;
+    }
+
+    public function getSupplierWhatsappUrl(string $customMessage = ''): ?string
+    {
+        $phone = $this->sanitized_supplier_contact;
+        if (empty($phone)) {
+            return null;
+        }
+        $url = 'https://wa.me/' . $phone;
+        if (!empty($customMessage)) {
+            $url .= '?text=' . urlencode($customMessage);
+        }
+        return $url;
     }
 }

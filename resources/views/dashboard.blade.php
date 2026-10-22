@@ -58,6 +58,17 @@
         <div class="stat-value" style="color: {{ $pendingReturns > 0 ? '#fbbf24' : '#fb923c' }};">{{ $pendingReturns }}</div>
         <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Solicitudes pendientes &rarr;</div>
     </a>
+
+    <a href="{{ route('admin.claims.index') }}" class="stat-card" style="text-decoration: none; border-color: {{ $pendingClaims > 0 ? 'rgba(239, 68, 68, 0.4)' : 'rgba(255, 255, 255, 0.08)' }};">
+        <div class="stat-label" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Reclamaciones</span>
+            @if($pendingClaims > 0)
+                <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; font-size: 0.65rem; padding: 0.15rem 0.45rem; border-radius: 9999px; font-weight: 800;">PENDIENTE</span>
+            @endif
+        </div>
+        <div class="stat-value" style="color: {{ $pendingClaims > 0 ? '#fca5a5' : '#38bdf8' }};">{{ $pendingClaims }}</div>
+        <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.35rem;">Libro de Reclamaciones &rarr;</div>
+    </a>
 </div>
 
 

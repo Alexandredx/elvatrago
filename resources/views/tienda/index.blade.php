@@ -80,7 +80,7 @@
 
                 <!-- Card Body -->
                 <div class="product-card-body">
-                    <div class="product-category-name">{{ $product->category->name ?? 'General' }}</div>
+                    <div class="product-category-name">{{ $product->category?->name ?? 'General' }}</div>
                     <a href="{{ route('shop.show', $product->slug) }}" target="_blank" rel="noopener noreferrer">
                         <h3 class="product-title">{{ $product->title }}</h3>
                     </a>

@@ -67,4 +67,37 @@ class TiendaController extends Controller
 
         return view('tienda.show', compact('product', 'relatedProducts'));
     }
+
+    /**
+     * Redirige un enlace corto de producto (/p/{identifier}) a la página completa del producto.
+     */
+    public function shortRedirect($identifier)
+    {
+        $query = Product::where('is_active', true);
+
+        // 1. Buscar por short_code personalizado
+        $product = (clone $query)->where('short_code', $identifier)->first();
+
+        // 2. Si no existe y el identificador es numérico, buscar por ID
+        if (!$product && is_numeric($identifier)) {
+            $product = (clone $query)->where('id', $identifier)->first();
+        }
+
+        // 3. Fallback: buscar por slug
+        if (!$product) {
+            $product = (clone $query)->where('slug', $identifier)->first();
+        }
+
+        if (!$product) {
+            return redirect()->route('shop.index')->with('error', 'El producto solicitado no existe o ya no está disponible.');
+        }
+
+        $queryParams = request()->query();
+        $targetUrl = route('shop.show', $product->slug);
+        if (!empty($queryParams)) {
+            $targetUrl .= '?' . http_build_query($queryParams);
+        }
+
+        return redirect()->to($targetUrl, 302);
+    }
 }

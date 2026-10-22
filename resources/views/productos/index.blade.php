@@ -58,7 +58,8 @@
                     <th style="padding: 1rem 1.25rem;">Estado</th>
                     <th style="padding: 1rem 1.25rem;">Categoría</th>
                     <th style="padding: 1rem 1.25rem;">Inventario</th>
-                    <th style="padding: 1rem 1.25rem;">Precio</th>
+                    <th style="padding: 1rem 1.25rem;">Precio & Margen</th>
+                    <th style="padding: 1rem 1.25rem;">Proveedor</th>
                     <th style="padding: 1rem 1.25rem; text-align: center;">Acciones</th>
                 </tr>
             </thead>
@@ -71,7 +72,12 @@
                                 <img src="{{ $product->primary_image_url }}" alt="" style="width: 48px; height: 48px; object-fit: cover; border-radius: 0.6rem; border: 1px solid rgba(255,255,255,0.1); background: #0f172a;">
                                 <div>
                                     <div style="font-weight: 700; color: #ffffff; font-size: 0.925rem;">{{ $product->title }}</div>
-                                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.15rem;">slug: /{{ $product->slug }}</div>
+                                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.15rem; display: flex; align-items: center; gap: 0.4rem;">
+                                        <span>Link corto:</span>
+                                        <button type="button" onclick="navigator.clipboard.writeText('{{ $product->short_url }}'); this.innerText='¡Copiado!'; setTimeout(() => this.innerText='/p/{{ $product->short_code ?: $product->id }}', 1800)" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; font-family: monospace; font-size: 0.72rem; padding: 0.1rem 0.4rem; border-radius: 0.3rem; cursor: pointer;" title="Clic para copiar link corto">
+                                            /p/{{ $product->short_code ?: $product->id }}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -91,7 +97,7 @@
 
                         <!-- Category -->
                         <td style="padding: 1rem 1.25rem; color: #cbd5e1; font-weight: 500;">
-                            {{ $product->category->name ?? 'Sin Categoría' }}
+                            {{ $product->category?->name ?? 'Sin Categoría' }}
                         </td>
 
                         <!-- Inventory -->
@@ -105,21 +111,51 @@
                             @endif
                         </td>
 
-                        <!-- Price -->
+                        <!-- Price & Margin -->
                         <td style="padding: 1rem 1.25rem;">
                             <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">
-                                ${{ number_format($product->effective_price, 2) }}
+                                S/. {{ number_format($product->effective_price, 2) }}
                             </div>
-                            @if($product->sale_price && $product->sale_price < $product->price)
-                                <div style="font-size: 0.75rem; color: #64748b; text-decoration: line-through;">
-                                    ${{ number_format($product->price, 2) }}
+                            @if(!is_null($product->supplier_cost))
+                                <div style="font-size: 0.75rem; color: #34d399; margin-top: 0.15rem; font-weight: 600;">
+                                    Margen: {{ $product->supplier_profit_margin_percent }}% (+S/. {{ number_format($product->supplier_profit, 2) }})
                                 </div>
+                            @endif
+                        </td>
+
+                        <!-- Proveedor -->
+                        <td style="padding: 1rem 1.25rem;">
+                            @if($product->has_supplier)
+                                <div style="font-weight: 700; color: #f1f5f9; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+                                    <span>{{ $product->supplier_name ?: 'Proveedor registrado' }}</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.25rem;">
+                                    @if($product->supplier_cost)
+                                        <span style="font-size: 0.72rem; color: #94a3b8;">Costo: S/. {{ number_format($product->supplier_cost, 2) }}</span>
+                                    @endif
+                                    @if($product->supplier_url)
+                                        <a href="{{ $product->supplier_url }}" target="_blank" title="Abrir web del proveedor" style="color: #38bdf8; display: inline-flex; align-items: center;">
+                                            <i data-feather="external-link" style="width: 12px; height: 12px;"></i>
+                                        </a>
+                                    @endif
+                                    @if($product->supplier_contact)
+                                        <a href="{{ $product->getSupplierWhatsappUrl() }}" target="_blank" title="Contactar por WhatsApp" style="color: #25d366; display: inline-flex; align-items: center;">
+                                            <i data-feather="message-circle" style="width: 12px; height: 12px;"></i>
+                                        </a>
+                                    @endif
+                                </div>
+                            @else
+                                <span style="font-size: 0.75rem; color: #64748b; font-style: italic;">No configurado</span>
                             @endif
                         </td>
 
                         <!-- Actions -->
                         <td style="padding: 1rem 1.25rem; text-align: center;">
-                            <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
+                            <div style="display: flex; justify-content: center; align-items: center; gap: 0.45rem;">
+                                <button type="button" onclick="navigator.clipboard.writeText('{{ $product->short_url }}'); alert('¡Enlace corto copiado!\n{{ $product->short_url }}')" title="Copiar Link Corto" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; padding: 0.4rem 0.55rem; border-radius: 0.5rem; font-size: 0.8rem; display: inline-flex; align-items: center; cursor: pointer;">
+                                    <i data-feather="link" style="width: 14px; height: 14px;"></i>
+                                </button>
+
                                 <a href="{{ route('shop.show', $product->slug) }}" target="_blank" title="Ver en tienda" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; padding: 0.4rem 0.55rem; border-radius: 0.5rem; font-size: 0.8rem; display: inline-flex; align-items: center;">
                                     <i data-feather="external-link" style="width: 14px; height: 14px;"></i>
                                 </a>

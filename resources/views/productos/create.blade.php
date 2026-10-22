@@ -220,11 +220,129 @@
                     </div>
                 </div>
 
+                <!-- CARD 6: Proveedor & Abastecimiento (100% Privado Admin) -->
+                <div style="background: rgba(30, 41, 59, 0.55); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: 1.25rem; padding: 1.75rem; box-shadow: 0 8px 24px rgba(0,0,0,0.25);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                        <div>
+                            <h3 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-feather="truck" style="color: #f97316; width: 18px; height: 18px;"></i> Proveedor & Abastecimiento
+                            </h3>
+                            <p style="color: #94a3b8; font-size: 0.8rem; margin: 0.25rem 0 0;">Control interno de compras, costos y contacto mayorista para surtir tus pedidos.</p>
+                        </div>
+                        <span style="background: rgba(249, 115, 22, 0.15); color: #fdba74; border: 1px solid rgba(249, 115, 22, 0.35); padding: 0.25rem 0.65rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.35rem;">
+                            <i data-feather="lock" style="width: 12px; height: 12px;"></i> 100% Privado Admin
+                        </span>
+                    </div>
+
+                    <!-- Proveedor y Costo -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                        <div>
+                            <label for="supplier_name" style="display: block; font-size: 0.85rem; font-weight: 700; color: #ffffff; margin-bottom: 0.45rem;">
+                                Nombre del Proveedor o Mayorista
+                            </label>
+                            <input type="text" name="supplier_name" id="supplier_name" value="{{ old('supplier_name') }}" placeholder="Ej: Mayorista Paruro, Distribuidora Gamarra, Proveedor AliExpress..." style="width: 100%; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.9rem;">
+                        </div>
+
+                        <div>
+                            <label for="supplier_cost" style="display: block; font-size: 0.85rem; font-weight: 700; color: #ffffff; margin-bottom: 0.45rem;">
+                                Costo Unitario de Compra (S/.)
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; font-weight: 700;">S/.</span>
+                                <input type="number" step="0.01" name="supplier_cost" id="supplier_cost" value="{{ old('supplier_cost') }}" placeholder="0.00" oninput="calculateProfitMetrics()" style="width: 100%; padding: 0.85rem 1rem 0.85rem 2.5rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #34d399; font-size: 1rem; font-weight: 700;">
+                            </div>
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 0.25rem;">Lo que te cuesta comprar cada unidad para calcular tu ganancia neta.</span>
+                        </div>
+                    </div>
+
+                    <!-- Live Profit & Margin Indicator Box -->
+                    <div id="profitIndicatorBox" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 0.85rem; padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: none;">
+                        <div style="font-size: 0.78rem; text-transform: uppercase; color: #94a3b8; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 0.65rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <i data-feather="trending-up" style="width: 14px; height: 14px; color: #34d399;"></i> Métricas de Rentabilidad Estimadas
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+                            <div style="background: rgba(30, 41, 59, 0.6); padding: 0.75rem; border-radius: 0.65rem;">
+                                <div style="font-size: 0.75rem; color: #94a3b8;">Precio de Venta</div>
+                                <div id="metricSalePrice" style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-top: 0.2rem;">S/. 0.00</div>
+                            </div>
+                            <div style="background: rgba(30, 41, 59, 0.6); padding: 0.75rem; border-radius: 0.65rem;">
+                                <div style="font-size: 0.75rem; color: #94a3b8;">Ganancia / Unidad</div>
+                                <div id="metricProfit" style="font-size: 1.1rem; font-weight: 800; color: #34d399; margin-top: 0.2rem;">S/. 0.00</div>
+                            </div>
+                            <div style="background: rgba(30, 41, 59, 0.6); padding: 0.75rem; border-radius: 0.65rem;">
+                                <div style="font-size: 0.75rem; color: #94a3b8;">Margen Estimado</div>
+                                <div id="metricMargin" style="font-size: 1.1rem; font-weight: 800; color: #34d399; margin-top: 0.2rem;">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enlace Web del Proveedor y SKU -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+                        <div>
+                            <label for="supplier_url" style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.45rem;">
+                                Enlace Web o Catálogo del Proveedor
+                            </label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="url" name="supplier_url" id="supplier_url" value="{{ old('supplier_url') }}" placeholder="https://es.aliexpress.com/item/... o enlace de Drive/Catálogo" style="flex: 1; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.85rem;">
+                                <button type="button" onclick="openSupplierUrl()" title="Abrir enlace" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; padding: 0.85rem 1rem; border-radius: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i data-feather="external-link" style="width: 16px; height: 16px;"></i>
+                                </button>
+                            </div>
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 0.25rem;">Útil para reordenar stock rápidamente con 1 clic cuando recibas pedidos.</span>
+                        </div>
+
+                        <div>
+                            <label for="supplier_sku" style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.45rem;">
+                                Código / SKU Proveedor
+                            </label>
+                            <input type="text" name="supplier_sku" id="supplier_sku" value="{{ old('supplier_sku') }}" placeholder="Ej: PROV-9921" style="width: 100%; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.9rem;">
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp y Notas Internas -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div>
+                            <label for="supplier_contact" style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.45rem;">
+                                WhatsApp / Teléfono del Proveedor
+                            </label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="text" name="supplier_contact" id="supplier_contact" value="{{ old('supplier_contact') }}" placeholder="Ej: +51 987 654 321" style="flex: 1; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.9rem;">
+                                <button type="button" onclick="testSupplierWhatsapp()" title="Enviar WhatsApp de prueba" style="background: rgba(37, 211, 102, 0.2); border: 1px solid rgba(37, 211, 102, 0.4); color: #25d366; padding: 0.85rem 1rem; border-radius: 0.75rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i data-feather="message-circle" style="width: 16px; height: 16px;"></i>
+                                </button>
+                            </div>
+                            <span style="font-size: 0.75rem; color: #94a3b8; display: block; margin-top: 0.25rem;">En la pantalla de órdenes podrás enviar el pedido directamente a este WhatsApp.</span>
+                        </div>
+
+                        <div>
+                            <label for="supplier_notes" style="display: block; font-size: 0.85rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.45rem;">
+                                Notas Privadas de Abastecimiento
+                            </label>
+                            <textarea name="supplier_notes" id="supplier_notes" rows="2" placeholder="Ej: Pedir antes de las 11am para entrega hoy. Local 45 Galería El Rey..." style="width: 100%; padding: 0.85rem 1rem; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.85rem; line-height: 1.4;">{{ old('supplier_notes') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- RIGHT SIDEBAR COLUMN -->
             <div style="display: flex; flex-direction: column; gap: 1.75rem;">
                 
+                <!-- CARD: Enlace Corto & Difusión -->
+                <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.5rem;">
+                    <h3 style="font-size: 0.95rem; font-weight: 800; color: #ffffff; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-feather="link" style="color: #38bdf8; width: 16px; height: 16px;"></i> Enlace Corto / Difusión
+                    </h3>
+                    <p style="color: #94a3b8; font-size: 0.78rem; margin: 0 0 1rem;">Crea un link compacto para compartir en TikTok, Instagram o WhatsApp.</p>
+                    
+                    <label for="short_code" style="display: block; font-size: 0.8rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.35rem;">Alias Personalizado (Opcional):</label>
+                    <div style="display: flex; align-items: center; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.75rem; overflow: hidden;">
+                        <span style="padding: 0.75rem 0.65rem; color: #64748b; font-size: 0.8rem; background: rgba(255,255,255,0.03); border-right: 1px solid rgba(255,255,255,0.08);">/p/</span>
+                        <input type="text" name="short_code" id="short_code" value="{{ old('short_code') }}" placeholder="ej: polo-pima" style="flex: 1; padding: 0.75rem; background: transparent; border: none; color: #ffffff; font-size: 0.85rem; outline: none;">
+                    </div>
+                    <span style="font-size: 0.72rem; color: #94a3b8; display: block; margin-top: 0.35rem;">Si lo dejas vacío, se usará automáticamente el ID del producto (ej: /p/1).</span>
+                </div>
+
                 <!-- CARD: Product Status -->
                 <div style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 1.5rem;">
                     <h3 style="font-size: 0.95rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem;">
@@ -406,12 +524,66 @@
             const savings = price - salePrice;
             const pct = Math.round((savings / price) * 100);
             indicator.style.display = 'block';
-            indicator.innerHTML = `✨ Oferta activa: ¡${pct}% de descuento! El cliente ahorra $${savings.toFixed(2)}`;
+            indicator.innerHTML = `✨ Oferta activa: ¡${pct}% de descuento! El cliente ahorra S/. ${savings.toFixed(2)}`;
         } else {
             indicator.style.display = 'none';
         }
+        calculateProfitMetrics();
     }
     calculateDiscount();
+
+    function calculateProfitMetrics() {
+        const price = parseFloat(document.getElementById('price').value) || 0;
+        const salePrice = parseFloat(document.getElementById('sale_price').value) || 0;
+        const effectivePrice = (salePrice > 0 && salePrice < price) ? salePrice : price;
+        const supplierCost = parseFloat(document.getElementById('supplier_cost')?.value) || 0;
+        const box = document.getElementById('profitIndicatorBox');
+        if (!box) return;
+
+        if (supplierCost > 0 && effectivePrice > 0) {
+            const profit = effectivePrice - supplierCost;
+            const margin = Math.round((profit / effectivePrice) * 100);
+            
+            document.getElementById('metricSalePrice').innerText = `S/. ${effectivePrice.toFixed(2)}`;
+            
+            const profitEl = document.getElementById('metricProfit');
+            profitEl.innerText = `S/. ${profit.toFixed(2)}`;
+            profitEl.style.color = profit >= 0 ? '#34d399' : '#f87171';
+
+            const marginEl = document.getElementById('metricMargin');
+            marginEl.innerText = `${margin}%`;
+            marginEl.style.color = margin >= 30 ? '#34d399' : (margin >= 10 ? '#fbbf24' : '#f87171');
+
+            box.style.display = 'block';
+        } else {
+            box.style.display = 'none';
+        }
+    }
+    calculateProfitMetrics();
+
+    function openSupplierUrl() {
+        const url = document.getElementById('supplier_url')?.value?.trim();
+        if (url) {
+            window.open(url, '_blank');
+        } else {
+            alert('Ingresa primero la URL o catálogo web del proveedor.');
+        }
+    }
+
+    function testSupplierWhatsapp() {
+        const contact = document.getElementById('supplier_contact')?.value?.trim();
+        if (!contact) {
+            alert('Ingresa primero el número de WhatsApp del proveedor.');
+            return;
+        }
+        let digits = contact.replace(/\D/g, '');
+        if (digits.length === 9 && digits.startsWith('9')) {
+            digits = '51' + digits;
+        }
+        const title = document.getElementById('title')?.value?.trim() || 'este producto';
+        const msg = encodeURIComponent(`Hola, le escribo de GlobalClick para consultar disponibilidad y precio al por mayor de: ${title}.`);
+        window.open(`https://wa.me/${digits}?text=${msg}`, '_blank');
+    }
 
     function toggleSizeOptions(enabled) {
         const section = document.getElementById('sizesConfigSection');

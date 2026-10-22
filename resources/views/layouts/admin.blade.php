@@ -55,13 +55,27 @@
                         </span>
                     @endif
                 </a>
+
+                <a href="{{ route('admin.claims.index') }}" style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; color: {{ request()->routeIs('admin.claims.*') ? '#ffffff' : '#94a3b8' }}; background: {{ request()->routeIs('admin.claims.*') ? 'rgba(249, 115, 22, 0.2)' : 'transparent' }}; font-weight: 600; font-size: 0.9rem;">
+                    <span style="display: flex; align-items: center; gap: 0.75rem;">
+                        <i data-feather="book-open"></i> Reclamaciones
+                    </span>
+                    @php
+                        $pendingClaimsCount = \App\Models\Claim::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingClaimsCount > 0)
+                        <span style="background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 0.7rem; font-weight: 800; padding: 0.1rem 0.45rem; border-radius: 9999px;">
+                            {{ $pendingClaimsCount }}
+                        </span>
+                    @endif
+                </a>
             </nav>
 
 
             <div style="padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="font-size: 0.825rem; font-weight: 700; color: #fdba74; display: flex; align-items: center; gap: 0.4rem;">
                     <i data-feather="shield" style="width: 14px; height: 14px; color: #fb923c;"></i>
-                    {{ Auth::user()->name }} (Admin)
+                    {{ Auth::user()?->name ?? 'Administrador' }} (Admin)
                 </div>
 
                 <a href="{{ route('shop.index') }}" style="display: flex; align-items: center; gap: 0.5rem; color: #34d399; font-size: 0.85rem; font-weight: 600;">

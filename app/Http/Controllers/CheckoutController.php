@@ -52,6 +52,7 @@ class CheckoutController extends Controller
             'customer_phone' => 'required|string|max:50',
             'shipping_address' => 'required|string',
             'payment_method' => 'required|in:tarjeta,yape',
+            'terms' => 'accepted',
         ];
 
         if ($request->input('payment_method') === 'tarjeta') {
@@ -67,6 +68,7 @@ class CheckoutController extends Controller
         $request->validate($rules, [
             'payment_method.required' => 'Debes seleccionar un método de pago.',
             'payment_method.in' => 'El método de pago debe ser Tarjeta o Yape.',
+            'terms.accepted' => 'Debes declarar que eres mayor de edad y aceptar los Términos y Condiciones y la Política de Privacidad para continuar.',
             'card_number.required' => 'Ingresa el número de tu tarjeta.',
             'card_holder.required' => 'Ingresa el titular de la tarjeta.',
             'card_expiry.required' => 'Ingresa la fecha de vencimiento (MM/AA).',
@@ -81,13 +83,14 @@ class CheckoutController extends Controller
         }
 
         $orderNumber = 'ORD-' . strtoupper(Str::random(8));
-        $currency = session('currency', 'USD');
+        $currency = session('currency', 'PEN');
+        $chargeAmount = $currency === 'PEN' ? round($subtotal * 3.75, 2) : (float) $subtotal;
 
         // Procesar pago seguro contra la API de Culqi
         $paymentResult = $culqi->process(
             method: $request->payment_method,
             paymentData: $request->only(['card_number', 'card_holder', 'card_expiry', 'card_cvv', 'yape_phone', 'yape_code', 'token_id']),
-            amount: $subtotal,
+            amount: $chargeAmount,
             currency: $currency,
             email: $request->customer_email,
             orderNumber: $orderNumber,
@@ -110,7 +113,7 @@ class CheckoutController extends Controller
             'customer_email' => $request->customer_email,
             'customer_phone' => $request->customer_phone,
             'shipping_address' => $request->shipping_address,
-            'total_amount' => $subtotal,
+            'total_amount' => $chargeAmount,
             'payment_method' => $request->payment_method,
             'payment_reference' => $paymentResult['reference'],
             'payment_id' => $paymentResult['charge_id'],

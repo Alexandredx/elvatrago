@@ -8,7 +8,7 @@
     <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #94a3b8; margin-bottom: 2rem;">
         <a href="{{ route('shop.index') }}" style="color: #cbd5e1;">Inicio</a>
         <i data-feather="chevron-right" style="width: 14px; height: 14px;"></i>
-        <a href="{{ route('shop.index', ['category' => $product->category->slug ?? '']) }}" style="color: #cbd5e1;">{{ $product->category->name ?? 'General' }}</a>
+        <a href="{{ route('shop.index', ['category' => $product->category?->slug ?? '']) }}" style="color: #cbd5e1;">{{ $product->category?->name ?? 'General' }}</a>
         <i data-feather="chevron-right" style="width: 14px; height: 14px;"></i>
         <span style="color: #f97316; font-weight: 600;">{{ $product->title }}</span>
     </div>
@@ -116,7 +116,7 @@
         <!-- Right: Product Info & Buy/Redirect Actions -->
         <div style="display: flex; flex-direction: column;">
             <div style="font-size: 0.85rem; font-weight: 700; color: #f97316; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                {{ $product->category->name ?? 'General' }}
+                {{ $product->category?->name ?? 'General' }}
             </div>
             
             <h1 style="font-size: 2.25rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; line-height: 1.25;">
@@ -210,13 +210,60 @@
             </div>
 
             <!-- Features list -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; color: #94a3b8;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem;">
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <i data-feather="shield" style="color: #10b981; width: 16px; height: 16px;"></i> Compra 100% Protegida
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <i data-feather="truck" style="color: #f97316; width: 16px; height: 16px;"></i> Envíos a todo el país
                 </div>
+            </div>
+
+            <!-- Compartir Producto con Link Corto -->
+            <div style="background: rgba(30, 41, 59, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1rem; padding: 1.15rem; margin-bottom: 1.5rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <div style="font-size: 0.825rem; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 0.4rem;">
+                        <i data-feather="share-2" style="width: 14px; height: 14px; color: #f97316;"></i> Compartir este Producto
+                    </div>
+                    <span style="font-size: 0.75rem; color: #94a3b8;">Enlace corto optimizado</span>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <div style="flex: 1; background: #0f172a; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.65rem; padding: 0.6rem 0.85rem; font-family: monospace; font-size: 0.825rem; color: #38bdf8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        {{ $product->short_url }}
+                    </div>
+
+                    <button type="button" 
+                            onclick="navigator.clipboard.writeText('{{ $product->short_url }}'); const btn=this; const prev=btn.innerHTML; btn.innerHTML='<i data-feather=check style=width:14px;height:14px;></i> Copiado'; feather.replace(); setTimeout(() => { btn.innerHTML=prev; feather.replace(); }, 2000)" 
+                            style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.35); color: #38bdf8; padding: 0.6rem 0.95rem; border-radius: 0.65rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; flex-shrink: 0;"
+                            title="Copiar enlace corto">
+                        <i data-feather="copy" style="width: 14px; height: 14px;"></i> Copiar
+                    </button>
+
+                    @php
+                        $shareText = "¡Mira este producto en GlobalClick! " . $product->title . ": " . $product->short_url;
+                        $whatsappShareUrl = "https://wa.me/?text=" . urlencode($shareText);
+                    @endphp
+                    <a href="{{ $whatsappShareUrl }}" target="_blank" rel="noopener" style="background: rgba(37, 211, 102, 0.2); border: 1px solid rgba(37, 211, 102, 0.4); color: #25d366; padding: 0.6rem 0.95rem; border-radius: 0.65rem; font-size: 0.8rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; flex-shrink: 0;" title="Compartir en WhatsApp">
+                        <i data-feather="message-circle" style="width: 14px; height: 14px;"></i> WhatsApp
+                    </a>
+                </div>
+
+                @if(auth()->check() && auth()->user()->is_admin && $product->has_supplier)
+                    <div style="margin-top: 0.85rem; padding-top: 0.75rem; border-top: 1px dashed rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem;">
+                        <div style="color: #94a3b8; display: flex; align-items: center; gap: 0.35rem;">
+                            <span style="color: #fdba74; font-weight: 700;">🔒 Admin:</span>
+                            <span>Prov: <strong style="color: #ffffff;">{{ $product->supplier_name ?: 'Configurado' }}</strong></span>
+                            @if(!is_null($product->supplier_cost))
+                                <span>&bull; Costo: <strong style="color: #ffffff;">S/. {{ number_format($product->supplier_cost, 2) }}</strong></span>
+                                <span>&bull; Ganancia: <strong style="color: #34d399;">+S/. {{ number_format($product->supplier_profit, 2) }} ({{ $product->supplier_profit_margin_percent }}%)</strong></span>
+                            @endif
+                        </div>
+                        <a href="{{ route('admin.products.edit', $product->id) }}" style="color: #f97316; font-weight: 700; text-decoration: underline;">
+                            Editar Producto
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
