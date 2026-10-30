@@ -113,7 +113,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::delete('products/images/{image}', [ProductoController::class, 'deleteImage'])->name('products.images.destroy');
 
     // Módulo: Categorías
-    Route::resource('categories', CategoriaController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('categories', CategoriaController::class)->except(['create', 'show']);
 
     // Módulo: Pedidos
     Route::get('orders', [PedidoController::class, 'index'])->name('orders.index');

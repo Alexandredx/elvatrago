@@ -32,6 +32,34 @@ class CategoriaController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Categoría creada con éxito.');
     }
 
+    public function edit(Category $category)
+    {
+        return view('categorias.edit', compact('category'));
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
+            'description' => 'nullable|string',
+            'icon' => 'nullable|string',
+        ]);
+
+        $newSlug = $request->filled('slug')
+            ? Str::slug($request->slug)
+            : ($request->name !== $category->name ? Str::slug($request->name) : $category->slug);
+
+        $category->update([
+            'name' => $request->name,
+            'slug' => $newSlug,
+            'description' => $request->description,
+            'icon' => $request->icon ?? $category->icon ?? 'tag',
+        ]);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Categoría actualizada con éxito.');
+    }
+
     public function destroy(Category $category)
     {
         $category->delete();
