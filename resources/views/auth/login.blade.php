@@ -72,7 +72,10 @@
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Contraseña</label>
                     <div style="position: relative;">
                         <i data-feather="lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; width: 18px; height: 18px;"></i>
-                        <input type="password" name="password" required placeholder="••••••••" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none; transition: all 0.2s ease;">
+                        <input type="password" id="login_password" name="password" required placeholder="••••••••" style="width: 100%; padding: 0.8rem 2.75rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none; transition: all 0.2s ease;">
+                        <button type="button" onclick="togglePassword('login_password', this)" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #64748b; display: flex; align-items: center; padding: 0;">
+                            <i data-feather="eye" style="width: 18px; height: 18px;"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -110,6 +113,13 @@
     </div>
 
     <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            btn.innerHTML = '<i data-feather="' + (isHidden ? 'eye-off' : 'eye') + '" style="width: 18px; height: 18px;"></i>';
+            feather.replace();
+        }
         feather.replace();
     </script>
 </body>

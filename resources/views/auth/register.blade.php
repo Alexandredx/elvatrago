@@ -79,7 +79,10 @@
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Contraseña</label>
                     <div style="position: relative;">
                         <i data-feather="lock" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; width: 18px; height: 18px;"></i>
-                        <input type="password" name="password" required placeholder="Mínimo 6 caracteres" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
+                        <input type="password" id="reg_password" name="password" required placeholder="Mínimo 6 caracteres" style="width: 100%; padding: 0.8rem 2.75rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
+                        <button type="button" onclick="togglePassword('reg_password', this)" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #64748b; display: flex; align-items: center; padding: 0;">
+                            <i data-feather="eye" style="width: 18px; height: 18px;"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -87,7 +90,10 @@
                     <label style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Confirmar Contraseña</label>
                     <div style="position: relative;">
                         <i data-feather="check-circle" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; width: 18px; height: 18px;"></i>
-                        <input type="password" name="password_confirmation" required placeholder="Repite tu contraseña" style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
+                        <input type="password" id="reg_password_confirm" name="password_confirmation" required placeholder="Repite tu contraseña" style="width: 100%; padding: 0.8rem 2.75rem 0.8rem 2.75rem; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 0.75rem; color: #ffffff; font-size: 0.95rem; outline: none;">
+                        <button type="button" onclick="togglePassword('reg_password_confirm', this)" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #64748b; display: flex; align-items: center; padding: 0;">
+                            <i data-feather="eye" style="width: 18px; height: 18px;"></i>
+                        </button>
                     </div>
                 </div>
 
@@ -114,6 +120,13 @@
     </div>
 
     <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            btn.innerHTML = '<i data-feather="' + (isHidden ? 'eye-off' : 'eye') + '" style="width: 18px; height: 18px;"></i>';
+            feather.replace();
+        }
         feather.replace();
     </script>
 </body>
