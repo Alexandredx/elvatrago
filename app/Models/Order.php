@@ -28,7 +28,9 @@ class Order extends Model
         return match($this->payment_method) {
             'yape' => 'Yape',
             'tarjeta' => 'Tarjeta de Débito / Crédito',
-            default => ucfirst($this->payment_method ?? 'Tarjeta'),
+            'izipay' => 'Izipay (Tarjeta / Yape / QR)',
+            'por_coordinar' => 'Pago por coordinar',
+            default => ucfirst($this->payment_method ?? 'Por coordinar'),
         };
     }
 

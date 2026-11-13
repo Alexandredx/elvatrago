@@ -216,13 +216,13 @@
                         <strong style="color: #ffffff;">Dirección de Entrega:</strong><br>
                         <span style="color: #fdba74;">{{ $order->shipping_address }}</span><br><br>
                         <strong style="color: #ffffff;">Medio de Pago:</strong> 
-                        <span style="color: {{ $order->payment_method === 'yape' ? '#00d2c4' : '#fdba74' }}; font-weight: 700;">{{ $order->payment_method_name }}</span>
+                        <span style="color: {{ $order->payment_method === 'yape' ? '#00d2c4' : ($order->payment_method === 'por_coordinar' ? '#38bdf8' : '#fdba74') }}; font-weight: 700;">{{ $order->payment_method_name }}</span>
                         @if($order->payment_reference)
                             <div style="font-size: 0.8rem; color: #94a3b8;">{{ $order->payment_reference }}</div>
                         @endif
                         @if($order->payment_id)
                             <div style="font-size: 0.75rem; color: #34d399; margin-top: 0.25rem;">
-                                Transacción Culqi: {{ $order->payment_id }}
+                                Transacción: {{ $order->payment_id }}
                             </div>
                         @endif
                     </div>

@@ -93,7 +93,7 @@
             </span>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: #cbd5e1;">
+        <div class="success-info-grid">
             <div>
                 <strong>Cliente:</strong> {{ $order->customer_name }}<br>
                 <strong>Email:</strong> {{ $order->customer_email }}<br>
@@ -102,14 +102,18 @@
             <div>
                 <strong>Dirección de Envío:</strong><br>
                 {{ $order->shipping_address }}<br><br>
-                <strong>Medio de Pago:</strong><br>
-                @if($order->payment_method === 'yape')
+                <strong>Estado del Pago:</strong><br>
+                @if($order->payment_method === 'por_coordinar')
+                    <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.45); color: #38bdf8; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.55rem; border-radius: 0.4rem; margin-top: 0.2rem;">
+                        <i data-feather="clock" style="width: 13px; height: 13px;"></i> Por coordinar
+                    </span>
+                @elseif($order->payment_method === 'yape')
                     <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(116, 34, 132, 0.3); border: 1px solid rgba(116, 34, 132, 0.6); color: #00d2c4; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.55rem; border-radius: 0.4rem; margin-top: 0.2rem;">
                         <i data-feather="smartphone" style="width: 13px; height: 13px;"></i> Yape (BCP)
                     </span>
                 @else
                     <span style="display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(249, 115, 22, 0.2); border: 1px solid rgba(249, 115, 22, 0.5); color: #fdba74; font-weight: 700; font-size: 0.8rem; padding: 0.2rem 0.55rem; border-radius: 0.4rem; margin-top: 0.2rem;">
-                        <i data-feather="credit-card" style="width: 13px; height: 13px;"></i> Tarjeta de Débito / Crédito
+                        <i data-feather="credit-card" style="width: 13px; height: 13px;"></i> {{ $order->payment_method_name }}
                     </span>
                 @endif
                 @if($order->payment_reference)
@@ -119,7 +123,7 @@
                 @endif
                 @if($order->payment_id)
                     <div style="font-size: 0.75rem; color: #34d399; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.25rem;">
-                        <i data-feather="check-circle" style="width: 12px; height: 12px;"></i> Transacción Culqi: {{ $order->payment_id }}
+                        <i data-feather="check-circle" style="width: 12px; height: 12px;"></i> Transacción: {{ $order->payment_id }}
                     </div>
                 @endif
             </div>

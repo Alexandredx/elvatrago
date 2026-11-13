@@ -103,8 +103,8 @@
                     <td style="padding: 1.1rem 1.25rem; font-weight: 800; color: #34d399;">
                         ${{ number_format($order->total_amount, 2) }}
                         <div style="margin-top: 0.25rem;">
-                            <span style="font-size: 0.7rem; font-weight: 700; color: {{ $order->payment_method === 'yape' ? '#00d2c4' : '#fdba74' }}; background: {{ $order->payment_method === 'yape' ? 'rgba(116, 34, 132, 0.3)' : 'rgba(249, 115, 22, 0.15)' }}; padding: 0.1rem 0.4rem; border-radius: 0.25rem;">
-                                {{ $order->payment_method === 'yape' ? 'Yape' : 'Tarjeta' }}
+                            <span style="font-size: 0.7rem; font-weight: 700; color: {{ $order->payment_method === 'yape' ? '#00d2c4' : ($order->payment_method === 'por_coordinar' ? '#38bdf8' : '#fdba74') }}; background: {{ $order->payment_method === 'yape' ? 'rgba(116, 34, 132, 0.3)' : ($order->payment_method === 'por_coordinar' ? 'rgba(56, 189, 248, 0.15)' : 'rgba(249, 115, 22, 0.15)') }}; padding: 0.1rem 0.4rem; border-radius: 0.25rem;">
+                                {{ $order->payment_method === 'yape' ? 'Yape' : ($order->payment_method === 'por_coordinar' ? 'Por coordinar' : 'Tarjeta') }}
                             </span>
                         </div>
                     </td>

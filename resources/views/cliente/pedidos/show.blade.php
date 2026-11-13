@@ -188,13 +188,17 @@
                     <span style="color: #94a3b8; font-size: 0.85rem;">Email: {{ $order->customer_email }}</span>
                     <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed rgba(255,255,255,0.08);">
                         <span style="font-size: 0.8rem; color: #94a3b8;">Medio de Pago:</span><br>
-                        @if($order->payment_method === 'yape')
+                        @if($order->payment_method === 'por_coordinar')
+                            <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #38bdf8; font-weight: 700; font-size: 0.85rem;">
+                                <i data-feather="clock" style="width: 14px; height: 14px;"></i> Pago por coordinar
+                            </span>
+                        @elseif($order->payment_method === 'yape')
                             <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #00d2c4; font-weight: 700; font-size: 0.85rem;">
                                 <i data-feather="smartphone" style="width: 14px; height: 14px;"></i> Yape (BCP)
                             </span>
                         @else
                             <span style="display: inline-flex; align-items: center; gap: 0.35rem; color: #fdba74; font-weight: 700; font-size: 0.85rem;">
-                                <i data-feather="credit-card" style="width: 14px; height: 14px;"></i> Tarjeta de Débito / Crédito
+                                <i data-feather="credit-card" style="width: 14px; height: 14px;"></i> {{ $order->payment_method_name }}
                             </span>
                         @endif
                         @if($order->payment_reference)
@@ -202,7 +206,7 @@
                         @endif
                         @if($order->payment_id)
                             <div style="font-size: 0.7rem; color: #34d399; margin-top: 0.25rem;">
-                                Transacción Culqi: {{ $order->payment_id }}
+                                Transacción: {{ $order->payment_id }}
                             </div>
                         @endif
                     </div>
